@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void    ft_error(t_struct *s, int error, char *name)
+void    ft_error(int error, char *name)
 {
     char    *str;
 

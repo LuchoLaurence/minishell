@@ -26,13 +26,13 @@ static void ft_pipe_and_fork(t_struct *s)
 	{
 		s->parsed->pipe_fd = malloc(sizeof(int) * 2);
 		if (!(s->parsed->pipe_fd))
-			return (ft_error(s, MALLOC, "malloc"));
+			return (ft_error(MALLOC, "malloc"));
 		if (pipe(s->parsed->pipe_fd) < 0)
-			return (ft_error(s, PIPE, "pipe"));
+			return (ft_error(PIPE, "pipe"));
 	}
 	s->parsed->pid = fork();
 	if (s->parsed->pid < 0)
-		return (ft_error(s, FORK, "fork"));
+		return (ft_error(FORK, "fork"));
 	if (s->parsed->pid == 0)
 		ft_child_process(s);
 	if (s->i_cmd > 0 && s->parsed->next)

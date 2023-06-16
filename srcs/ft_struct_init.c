@@ -1,21 +1,20 @@
 #include "minishell.h"
 
+/*	static void ft_struct_envp gets the envp and splits the lines into
+	two char *str, each envp node gets its char **value */
 static void	ft_struct_envp(t_struct *s, char **envp)
 {
-	t_envp	*temp;
 	int		i;
 
-	if (!s)
+	if (!s || !envp)
 		return ;
 	i = 0;
 	while (envp[i])
 	{
-		ft_node_add_back_envp(s);
-		if (i == 0)
-			temp = s->envp;
+		if (!(ft_strncmp("PATH=", envp[i], 5)))
+			ft_node_add_back_envp(s, ft_split_add_slash(envp[i]));
 		else
-			temp = temp->next;
-		temp->value = ft_split(envp[i], '=');
+			ft_node_add_back_envp(s, ft_split(envp[i], '='));
 		i++;
 	}
 }
@@ -28,6 +27,9 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->envp = NULL;
 	s->token = NULL;
 	s->parsed = NULL;
-	s->pid = NULL;
 	ft_struct_envp(s, envp);
+	s->i_cmd = 0;
+	s->nb_cmd = 0;
+	s->nb_pipe = 0;
+	s->error = 0;
 }

@@ -27,9 +27,9 @@ void    ft_free_ptr(void *ptr)
 }*/
 
 /*  void ft_free_everything frees everything */
-void    ft_free_everything(t_struct *s)
+/*void    ft_free_everything(t_struct *s)
 {
     if (!s)
         return ;
     ft_free_ptr((void *)s);
-}
+}*/

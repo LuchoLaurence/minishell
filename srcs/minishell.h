@@ -11,8 +11,9 @@
 # define FORK 4
 # define FIILE 5
 
-# define INFILE_PERMISSION_DENIED 1
+# define PERMISSION_DENIED 1
 
+# include <errno.h>
 # include <fcntl.h>
 
 typedef enum e_token_type
@@ -34,21 +35,26 @@ typedef struct s_envp
 {
 	char			**value;
 	struct s_envp	*next;
+	struct s_envp	*prev;
 }	t_envp;
 
 typedef struct s_token
 {
-	char		*str;
-	t_Tokentype	type;
+	char			*str;
+	t_Tokentype		type;
+	struct s_token	*next;
+	struct s_token	*prev;
 }	t_token;
 
 typedef struct s_redirec
 {
-	struct s_redirec	*next;
-	struct s_redirec	*prev;
-	char				*filename;
-	int					index;
-	int					in_or_out;
+	struct s_redirec	*next;				// = NULL
+	struct s_redirec	*prev;				// = NULL
+	char				*filename;			// = NULL
+	int					*here_d_pipe_fd;	// = NULL
+	pid_t				pid;
+	int					fd;					// = -1
+	t_Tokentype			type;
 }	t_redirec;
 
 typedef struct s_parsed
@@ -58,7 +64,7 @@ typedef struct s_parsed
 	pid_t			pid;
 	t_redirec		*redirection;
 	int				*pipe_fd;
-	int				nb_redirect;
+	int				*here_d_pipe_fd;
 	int				fd_in;
 	int				fd_out;
 	int				error;
@@ -69,6 +75,7 @@ typedef struct s_parsed
 typedef struct s_struct
 {
 	t_envp		*envp;
+	t_envp		*last_envp;
 	t_token		*token;
 	t_parsed	*parsed;
 	int			i_cmd;
@@ -79,12 +86,16 @@ typedef struct s_struct
 
 /*  Errors */
 
-void	ft_error(t_struct *s, int error, char *name);
+void	ft_error(int error, char *name);
+
+/*	Exec */
+
+void	ft_close_all_previous_files(t_parsed *parsed);
 
 /*  Freeing */
 
-void	ft_free_everything(t_struct *s);
-//void	ft_free_ptr(void *ptr);
+//void	ft_free_everything(t_struct *s);
+void	ft_free_ptr(void *ptr);
 
 /*  Lexer */
 
@@ -97,7 +108,10 @@ void	ft_struct_init(t_struct *s, char **envp);
 /*  Utils */
 
 void	ft_node_add_front(t_struct *s, char *cmd_name);
-void	ft_node_add_back_envp(t_struct *s);
+void	ft_node_add_back_envp(t_struct *s, char **value);
+void	ft_node_add_back_parsed(t_struct *s, char **command);
+void	ft_node_add_back_token(t_struct *s, char *str);
 char	**ft_minisplit(char *line, char c);
+char	**ft_split_add_slash(char const *s, char c);
 
 #endif
