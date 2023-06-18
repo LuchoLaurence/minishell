@@ -49,14 +49,14 @@ int	ft_open_file_out(t_parsed *parsed, t_redirec *redirection)
 	double_redirection_in, if we do not have permission to open a file, we
 	immediately quit the function, so if there are still files to be opened,
 	these will be not */
-void	ft_open_files_inside_pipe(t_parsed *index_parsed)
+int	ft_open_files_inside_pipe(t_parsed *index_parsed)
 {
 	t_redirec	*temp_redirec;
 	int			open_fd_in_temp;
 	int			error_code;
 
 	if (!index_parsed)
-		return ;
+		return (0);
 	error_code = 0;
 	temp_redirec = index_parsed->redirection;
 	while (temp_redirec)
@@ -67,9 +67,10 @@ void	ft_open_files_inside_pipe(t_parsed *index_parsed)
 			|| (temp_redirec->type == double_redirect_out))
 			error_code = ft_open_file_out(index_parsed, temp_redirec);
 		if (error_code)
-			return ;
+			return (1);
 		temp_redirec = temp_redirec->next;
 	}
+	return (0);
 }
 
 /*	void ft_open_files_get_fds opens all double_redirection_in from every
@@ -88,10 +89,10 @@ void	ft_open_files_get_fds(t_struct *s)
 		return ;
 	index_parsed = s->parsed;
 	ft_open_double_redirect_in(index_parsed);
-	while (index_parsed)
+	/*while (index_parsed)
 	{
 		ft_open_files_inside_pipe(index_parsed);
 		ft_close_all_previous_files(index_parsed);
 		index_parsed = index_parsed->next;
-	}
+	}*/
 }

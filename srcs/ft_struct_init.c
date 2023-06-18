@@ -32,4 +32,5 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->nb_cmd = 0;
 	s->nb_pipe = 0;
 	s->error = 0;
+	//s->previous_fd = 0;
 }

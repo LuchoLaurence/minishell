@@ -65,6 +65,7 @@ typedef struct s_parsed
 	t_redirec		*redirection;
 //	int				*pipe_fd;
 	int				*here_d_pipe_fd;
+	int				previous_fd;
 	int				fd_in;
 	int				fd_out;
 	int				error;
@@ -78,8 +79,8 @@ typedef struct s_struct
 	t_envp		*last_envp;
 	t_token		*token;
 	t_parsed	*parsed;
-	//int			*pipe_fd;				// for 3 fds technique
-	//int			previous_fd;			// check les //
+	int			*pipe_fd;				// for 3 fds technique
+										// check les //
 	int			i_cmd;
 	int			nb_cmd;
 	int			nb_pipe;
