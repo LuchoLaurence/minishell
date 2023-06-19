@@ -94,6 +94,7 @@ typedef struct s_struct
 
 void	ft_close_all_previous_files_error(t_parsed *parsed);
 void	ft_error(t_struct *s, int error, char *name);
+void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 
 /*	Exec */
 

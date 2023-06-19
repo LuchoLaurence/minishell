@@ -71,6 +71,8 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 		if (pipe(s->pipe_fd) < 0)
 			return (ft_error(s, PIPE, "pipe"));
 	}
+	else
+		ft_get_last_cmd_code(s, parsed);
 	parsed->pid = fork();
 	if (parsed->pid < 0)
 	{
