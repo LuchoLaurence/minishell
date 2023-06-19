@@ -5,18 +5,18 @@ static t_parsed	*ft_create_parsed_node(char **command)
 {
 	t_parsed	*parsed_node;
 
-	if (!command)
-		return (NULL);
+	//if (!command)
+	//	return (NULL);
 	parsed_node = malloc(sizeof(t_parsed));
 	if (!parsed_node)
 		return (NULL);
 	parsed_node->command = command;
 	parsed_node->path = NULL;
 	parsed_node->redirection = NULL;
-	parsed_node->pipe_fd = NULL;
+	//parsed_node->pipe_fd = NULL;
 	parsed_node->here_d_pipe_fd = NULL;
-	parsed_node->fd_in = -1;
-	parsed_node->fd_out = -1;
+	parsed_node->fd_in = 0;
+	parsed_node->fd_out = 0;
 	parsed_node->error = 0;
 	parsed_node->next = NULL;
 	parsed_node->prev = NULL;

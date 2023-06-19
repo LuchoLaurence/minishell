@@ -26,11 +26,14 @@ void	ft_struct_init(t_struct *s, char **envp)
 		return ;
 	s->envp = NULL;
 	s->token = NULL;
-	s->parsed = NULL;
 	ft_struct_envp(s, envp);
+	s->path_tab = ft_get_path_envp_tab(s->envp);
+	s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
+	s->pipe_fd = malloc(sizeof(int) * 2);
+	if (!(s->pipe_fd))
+		return (ft_error(s, MALLOC, "malloc"));
 	s->i_cmd = 0;
 	s->nb_cmd = 0;
 	s->nb_pipe = 0;
 	s->error = 0;
-	//s->previous_fd = 0;
 }

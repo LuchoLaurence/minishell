@@ -14,11 +14,17 @@ UTL =	$(addprefix $(UTL_DIR)/, $(UTL_FILES))
 
 SRC_DIR =	./srcs
 SRC_FILES =	\
+			close_all_previous_files.c \
 			error.c \
+			exec.c \
+			exec2.c \
 			ft_free_everything.c \
-			lexer.c \
 			ft_struct_init.c \
-			main.c
+			get_last_infile.c \
+			lexer.c \
+			main.c \
+			open_files_get_fds.c \
+			open_here_doc.c
 SRC =	$(UTL) $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 OBJ_DIR = ./objs

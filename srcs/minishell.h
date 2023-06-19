@@ -10,6 +10,7 @@
 # define PIPE 3
 # define FORK 4
 # define FIILE 5
+# define EXECVE 6
 
 # define PERMISSION_DENIED 1
 
@@ -65,7 +66,7 @@ typedef struct s_parsed
 	t_redirec		*redirection;
 //	int				*pipe_fd;
 	int				*here_d_pipe_fd;
-	int				previous_fd;
+	//int				previous_fd;
 	int				fd_in;
 	int				fd_out;
 	int				error;
@@ -81,6 +82,8 @@ typedef struct s_struct
 	t_parsed	*parsed;
 	int			*pipe_fd;				// for 3 fds technique
 										// check les //
+	char		*path_tab;
+	int			previous_fd;
 	int			i_cmd;
 	int			nb_cmd;
 	int			nb_pipe;
@@ -89,11 +92,17 @@ typedef struct s_struct
 
 /*  Errors */
 
-void	ft_error(int error, char *name);
+void	ft_close_all_previous_files_error(t_parsed *parsed);
+void	ft_error(t_struct *s, int error, char *name);
 
 /*	Exec */
 
-void	ft_close_all_previous_files(t_parsed *parsed);
+//void	ft_close_all_previous_files(t_parsed *parsed);
+void	ft_execution(t_struct *s, t_parsed *parsed);
+void	ft_get_last_infile(t_parsed *parsed);
+int		ft_open_double_redirect_in(t_struct *s, t_parsed *parsed);
+int		ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed);
+void	ft_wait_all_processes(t_struct *s);
 
 /*  Freeing */
 
@@ -106,6 +115,7 @@ void	ft_lexer(t_struct *s, char *line);
 
 /*	Init */
 
+char	**ft_get_path_envp_tab(t_envp *envp);
 void	ft_struct_init(t_struct *s, char **envp);
 
 /*  Utils */
@@ -115,6 +125,6 @@ void	ft_node_add_back_envp(t_struct *s, char **value);
 void	ft_node_add_back_parsed(t_struct *s, char **command);
 void	ft_node_add_back_token(t_struct *s, char *str);
 char	**ft_minisplit(char *line, char c);
-char	**ft_split_add_slash(char const *s, char c);
+char	**ft_split_add_slash(char const *s);
 
 #endif

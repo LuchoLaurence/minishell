@@ -10,7 +10,7 @@
 	(void) argv;
 	s = malloc(sizeof(t_struct));
 	if (!s)
-		return (ft_error(MALLOC, "malloc"), 1);
+		return (ft_error(s, MALLOC, "malloc"), 1);
 	ft_struct_init(s, envp);
 	while (1)
 	{
@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	s = malloc(sizeof(t_struct));
 	if (!s)
-		return (ft_error(MALLOC, "malloc"), 1);
+		return (ft_error(s, MALLOC, "malloc"), 1);
 	ft_struct_init(s, envp);
 	while (1)
 	{

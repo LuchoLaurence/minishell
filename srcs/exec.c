@@ -5,12 +5,7 @@ static void	ft_child_process_stdin(t_struct *s, t_parsed *parsed)
 	if (!s || !parsed)
 		return ;
 	close(s->pipe_fd[0]);
-	if (parsed->here_d_pipe_fd)
-	{
-		dup2(parsed->here_d_pipe_fd[0], STDIN_FILENO);
-		close(parsed->here_d_pipe_fd[0]);
-	}
-	else if (parsed->fd_in)
+	if (parsed->fd_in)
 	{
 		dup2(parsed->fd_in, STDIN_FILENO);
 		close(parsed->fd_in);
@@ -37,7 +32,7 @@ static void ft_child_process(t_struct *s, t_parsed *parsed)
 		close(s->pipe_fd[1]);
 	if (parsed->error)
 		exit(1);
-	ft_execution(parsed);
+	ft_execution(s, parsed);
 	//ft_free_everything(s, parsed);
 	exit(1);
 }
@@ -46,33 +41,31 @@ static void	ft_parent_process(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !parsed)
 		return ;
+	if (parsed->fd_in)
+		close(parsed->fd_in);
+	if (parsed->fd_out)	
+		close(parsed->fd_out);
 	close(s->pipe_fd[1]);
 	close(s->previous_fd);
 	if (parsed->next)
 		dup2(s->pipe_fd[0], s->previous_fd);
 	close(s->pipe_fd[0]);
-	if (!(parsed->next))
-		ft_wait_all_processes(s);
 	if (parsed->here_d_pipe_fd)
 	{
 		close(parsed->here_d_pipe_fd[0]);
 		fr_free_hd(parsed);
 	}
-	if (s->i_cmd > 0 && s->parsed->next)
-		close(s->parsed->pipe_fd[0]);
-	close(s->parsed->pipe_fd[1]);
+	if (!(parsed->next))
+		ft_wait_all_processes(s);
+	//if (s->i_cmd >= 0 && s->parsed->next)
+	if (parsed->next)
+		close(s->pipe_fd[0]);
 }
 
 static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !(parsed->command))
 		return ;
-	if (!(parsed->prev))
-	{
-		s->pipe_fd = malloc(sizeof(int) * 2);
-		if (!(s->pipe_fd))
-			return (ft_error(MALLOC, "malloc"));
-	}
 	if (parsed->next)
 	{
 		if (pipe(s->pipe_fd) < 0)
@@ -102,4 +95,5 @@ void ft_exec(t_struct *s)
 		ft_pipe_and_fork(s, parsed);
 		parsed = parsed->next;
 	}
+	unlink("jalsjrqwbzvljafsd");
 }
