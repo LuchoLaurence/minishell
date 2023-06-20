@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 /*int	main(int argc, char **argv, char **envp)
@@ -27,38 +26,141 @@
 	return (0);
 }*/
 
+/*int	ft_is_redirection(t_struct *s, t_parsed *parsed, char *str, int	i)
+{
+	if (!s || !str || (str[s->i] && str[s->i] != '<' && str[s->i] != '>'))
+		return (0);
+	if (str[s->i] == '<')
+	{
+		s->i += 1;
+		if (str[s->i] && str[s->i] == '<')
+			ft_node_add_back_redirec(parsed, double_redirect_in);
+		else
+			ft_node_add_back_redirec(parsed, redirect_in);
+	}
+	else if (str[s->i] == '>')
+	{
+		s->i += 1;
+		if (str[s->i] && str[s->i] == '>')
+			ft_node_add_back_redirec(parsed, double_redirect_out);
+		else
+			ft_node_add_back_redirec(parsed, redirect_out);
+	}
+	while (str[s->i] == ' ')
+		s->i += 1;
+	s->j = s->i;
+	return (1);
+}*/
+
+
+int	ft_is_redirection(t_struct *s, t_parsed *parsed, char *str, int	i)
+{
+	if (!s || !str || (str[i] && str[i] != '<' && str[i] != '>'))
+		return (0);
+	if (str[i] == '<')
+	{
+		i++;
+		if (str[i] && str[i] == '<')
+			ft_node_add_back_redirec(parsed, double_redirect_in);
+		else
+			ft_node_add_back_redirec(parsed, redirect_in);
+	}
+	else if (str[i] == '>')
+	{
+		i++;
+		if (str[i] && str[i] == '>')
+			ft_node_add_back_redirec(parsed, double_redirect_out);
+		else
+			ft_node_add_back_redirec(parsed, redirect_out);
+	}
+	while (str[i] == ' ')
+		i++;
+	s->i += i;
+	s->j = s->i;
+	return (1);
+}
+
+int	ft_check_next_str(t_struct *s, t_parsed *parsed, char *line, t_Tokentype t)
+{
+	char	*stock;
+
+	if (!s || !line)
+		return (0);
+	if (ft_is_special_char(s, line))
+		return (0);
+	if (t == redirect_in || t == redirect_out || t == double_redirect_in
+		|| t == double_redirect_out)
+	{
+		while (line[s->j] && !ft_is_redirection(s, parsed, &line[s->j], 0) && line[s->j] != ' ')
+			s->j += 1;
+		stock = ft_substr(line, s->i, s->j - s->i);
+		parsed->last_redire->filename = stock;
+	}
+	else
+	{
+		while (line[s->j] && !ft_is_special_char(s, line))
+			s->j += 1;
+		if (s->j == s->i)
+			return (0);
+		stock = ft_substr(line, s->i, s->j - s->i);
+		parsed->command = ft_split(stock, ' ');
+		free(stock);
+	}
+	s->i = s->j;
+	return (1);
+}
+
+/*	int ft_check_parsed_content checks if a command or a redirection is already
+	in the parsed node, if not, then it is an error and returns 0 */
+int	ft_check_parsed_content(t_parsed *parsed)
+{
+	if (!parsed)
+		return ;
+	if (!parsed->command && !parsed->redirection)
+		return (0);
+	return (1);
+}
+
+/*	void ft_get_str takes all info until the end of the line or the next '|' */
+int	ft_get_str(t_struct *s, t_parsed *parsed, char *line)
+{
+	if (!s || !parsed || !line)
+		return (0);
+	while (line[s->i] && line[s->i] == ' ')
+		s->i += 1;
+	if (ft_is_redirection(s, parsed, &line[s->i], 0))
+		if (!ft_check_next_str(s, parsed, line, parsed->last_redire->type))
+			return (ft_error(s, SYNTAX, "syntax"), 0);
+	else if (line[s->i] == '|')
+	{
+		if (!ft_check_parsed_content(parsed))
+			return (ft_error(s, SYNTAX, "syntax"), 0);
+		else
+			return (ft_node_add_back_parsed(s, NULL), 1);
+	}
+	else
+		ft_check_next_str(s, parsed, line, cmd);
+	if (line[s->i])
+		ft_get_str(s, parsed, line);
+	return (1);
+}
+
+/*	void ft_read_line interprets the prompt line and goes to the next parsed
+	node */
 void	ft_read_line(t_struct *s, char *line)
 {
+	t_parsed	*parsed;
+	
 	if (!s || !line)
 		return ;
-	int	i = 0;
-	int	j = 0;
-	while (line[i])
+	ft_node_add_back_parsed(s, NULL);
+	parsed = s->parsed;
+	while (line[s->i] && parsed)
 	{
-		if ((line[i] == '<' || line[i] == '>') && line[i + 1] == ' ')
-		{
-			i += 2;
-			j = i;
-			while (line[j] != ' ')
-				j++;
-			s->parsed->redirection->filename = ft_substr(line, i, j);
-			if (line[i - 2] == '<')
-				s->parsed->redirection->type = redirect_in;
-			if (line[i - 2] == '>')
-				s->parsed->redirection->type = redirect_out;
-		}
-		else if (!ft_strncmp(&line[i], "<<", 2) || !ft_strncmp(&line[i], ">>", 2))
-		{
-			i += 3;
-			j = i;
-			while (line[j] != ' ')
-				j++;
-			s->parsed->redirection->filename = ft_substr(line, i, j);
-			if (!ft_strncmp(&line[i - 3], "<<", 2))
-				s->parsed->redirection->type = double_redirect_in;
-			else if (!ft_strncmp(&line[i - 3], ">>", 2))
-				s->parsed->redirection->type = double_redirect_out;
-		}
+		if (!ft_get_str(s, parsed, line))
+			break ;
+		if (parsed->next)
+			parsed = parsed->next;
 	}
 }
 
@@ -83,7 +185,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		add_history(line);
 		ft_read_line(s, line);
-		ft_open_files_get_fds(s);
+		ft_exec(s);
+		//ft_open_files_get_fds(s);
 	}
 	//ft_free_everything(s);
 	return (0);

@@ -86,7 +86,7 @@ int	ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed)
 	if every redirection_in can be opened, it stores the last one's fd_in, same
 	for the redirection_out/double_redirection_out, it stores the last
 	one's fd_out */
-/*void	ft_open_files_get_fds(t_struct *s)
+void	ft_open_files_get_fds(t_struct *s)
 {
 	t_parsed	*index_parsed;
 
@@ -96,11 +96,8 @@ int	ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed)
 	ft_open_double_redirect_in(s, index_parsed);
 	while (index_parsed)
 	{
-		ft_open_files_inside_pipe(index_parsed);
-		ft_close_all_previous_files(index_parsed);
+		ft_open_files_inside_pipe(s, index_parsed);
+		//ft_close_all_previous_files(index_parsed);
 		index_parsed = index_parsed->next;
 	}
-	s->parsed->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
-	if (s->parsed->previous_fd == -1)
-		return (ft_error(s, FIILE, "jalsjrqwbzvljafsd"));
-}*/
+}

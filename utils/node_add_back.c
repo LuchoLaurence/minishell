@@ -30,7 +30,7 @@ void	ft_node_add_back_parsed(t_struct *s, char **command)
 	t_parsed	*last;
 	t_parsed	*temp;
 
-	if (!s || !command)
+	if (!s)
 		return ;
 	last = ft_create_parsed_node(command);
 	if (!(s->parsed))
@@ -98,6 +98,32 @@ void	ft_node_add_back_token(t_struct *s, char *str)
 		last->prev = temp;
 		temp->next = last;
 	}
+}
+
+void	ft_node_add_back_redirec(t_parsed *parsed, t_Tokentype type)
+{
+	t_redirec	*last;
+
+	if (!parsed)
+		return ;
+	last = malloc(sizeof(t_parsed));
+	if (!last)
+		return ;
+	last->next = NULL;
+	last->prev = NULL;
+	last->filename = NULL;
+	last->here_d_pipe_fd = NULL;
+	last->pid = 0;
+	last->fd = 0;
+	last->type = type;
+	if (!(parsed->redirection))
+		parsed->redirection = last;
+	if (parsed->last_redire)
+	{
+		last->prev = parsed->last_redire;
+		parsed->last_redire->next = last;
+	}
+	parsed->last_redire = last;
 }
 
 /*  ft_node_add_front creates a node calling ft_node_create and adds it

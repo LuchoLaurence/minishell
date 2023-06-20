@@ -19,7 +19,7 @@ static void ft_child_process(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !parsed)
 		return ;
-	parsed->error = ft_open_files_inside_pipe(parsed);
+	//parsed->error = ft_open_files_inside_pipe(s, parsed);
 	ft_child_process_stdin(s, parsed);
 	if (parsed->fd_out)
 	{
@@ -91,7 +91,8 @@ void ft_exec(t_struct *s)
 		return ;
 	//ft_open_files_get_fds(s);							// open all files and get fds
 	parsed = s->parsed;
-	ft_open_double_redirect_in(parsed);
+	//ft_open_double_redirect_in(s, parsed);
+	ft_open_files_get_fds(s);
 	while (parsed)
 	{
 		ft_pipe_and_fork(s, parsed);

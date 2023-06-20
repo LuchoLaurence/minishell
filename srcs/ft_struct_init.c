@@ -33,6 +33,8 @@ void	ft_struct_init(t_struct *s, char **envp)
 	if (!(s->pipe_fd))
 		return (ft_error(s, MALLOC, "malloc"));
 	s->i_cmd = 0;
+	s->i = 0;
+	s->j = 0;
 	s->nb_cmd = 0;
 	s->nb_pipe = 0;
 	s->error = 0;

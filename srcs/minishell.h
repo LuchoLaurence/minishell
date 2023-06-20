@@ -53,7 +53,7 @@ typedef struct s_redirec
 	struct s_redirec	*prev;				// = NULL
 	char				*filename;			// = NULL
 	int					*here_d_pipe_fd;	// = NULL
-	pid_t				pid;
+	pid_t				pid;				// for here_doc
 	int					fd;					// = -1
 	t_Tokentype			type;
 }	t_redirec;
@@ -64,6 +64,7 @@ typedef struct s_parsed
 	char			*path;
 	pid_t			pid;
 	t_redirec		*redirection;
+	t_redirec		*last_redire;
 //	int				*pipe_fd;
 	int				*here_d_pipe_fd;
 	//int				previous_fd;
@@ -85,10 +86,16 @@ typedef struct s_struct
 	char		*path_tab;
 	int			previous_fd;
 	int			i_cmd;
+	int			i;
+	int			j;
 	int			nb_cmd;
 	int			nb_pipe;
 	int			error;
 }	t_struct;
+
+/*	Built_ins */
+
+void	ft_pwd(void);
 
 /*  Errors */
 
@@ -124,6 +131,7 @@ void	ft_struct_init(t_struct *s, char **envp);
 void	ft_node_add_front(t_struct *s, char *cmd_name);
 void	ft_node_add_back_envp(t_struct *s, char **value);
 void	ft_node_add_back_parsed(t_struct *s, char **command);
+void	ft_node_add_back_redirec(t_parsed *parsed, t_Tokentype type);
 void	ft_node_add_back_token(t_struct *s, char *str);
 char	**ft_minisplit(char *line, char c);
 char	**ft_split_add_slash(char const *s);
