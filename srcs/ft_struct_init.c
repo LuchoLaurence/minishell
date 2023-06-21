@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+/*	char **ft_get_path_envp_tab gets the envp node that contains
+	the name "PATH=" */
+char	**ft_get_path_envp_tab(t_envp *envp)
+{
+	t_envp	*temp_envp;
+	char	**path_tab;
+
+	if (!envp)
+		return (NULL);
+	temp_envp = envp;
+	path_tab = NULL;
+	while (temp_envp && ft_strncmp(temp_envp->value[0], "PATH/", 5))
+		temp_envp = temp_envp->next;
+	if (temp_envp)
+		path_tab = temp_envp->value;
+	return (path_tab);
+}
+
 /*	static void ft_struct_envp gets the envp and splits the lines into
 	two char *str, each envp node gets its char **value */
 static void	ft_struct_envp(t_struct *s, char **envp)
@@ -26,16 +44,17 @@ void	ft_struct_init(t_struct *s, char **envp)
 		return ;
 	s->envp = NULL;
 	s->token = NULL;
+	s->parsed = NULL;
 	ft_struct_envp(s, envp);
 	s->path_tab = ft_get_path_envp_tab(s->envp);
-	s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
+	s->fd_in_saved = open(";ljkzxcvhafdl;j", O_RDONLY | O_CREAT, 0644);
+	s->fd_out_saved = open("jalsjasdgrqwbasqwrjlzcvdf", O_RDONLY | O_CREAT, 0644);
 	s->pipe_fd = malloc(sizeof(int) * 2);
 	if (!(s->pipe_fd))
 		return (ft_error(s, MALLOC, "malloc"));
-	s->i_cmd = 0;
 	s->i = 0;
 	s->j = 0;
-	s->nb_cmd = 0;
-	s->nb_pipe = 0;
 	s->error = 0;
+	dup2(STDIN_FILENO, s->fd_in_saved);
+	dup2(STDOUT_FILENO, s->fd_out_saved);
 }

@@ -37,12 +37,26 @@ void	ft_node_add_back_parsed(t_struct *s, char **command)
 		s->parsed = last;
 	else
 	{
+		/*temp = s->parsed;
+		while (s->parsed->next)
+			s->parsed = s->parsed->next;
+		last->prev = s->parsed;
+		s->parsed->next = last;
+		s->parsed = temp;*/
 		temp = s->parsed;
 		while (temp->next)
 			temp = temp->next;
 		last->prev = temp;
 		temp->next = last;
 	}
+/*	printf("s->parsed = %p\n", s->parsed);
+	if (s->parsed)
+	{
+		printf("s->parsed->next = %p\n", s->parsed->next);
+		if (s->parsed->next)
+			printf("s->parsed->next->prev = %p\n", s->parsed->next->prev);
+		printf("s->parsed->prev = %p\n", s->parsed->prev);
+	}*/
 }
 
 /*	void ft_node_add_back_parsed creates a envp node and adds it at
@@ -128,12 +142,12 @@ void	ft_node_add_back_redirec(t_parsed *parsed, t_Tokentype type)
 
 /*  ft_node_add_front creates a node calling ft_node_create and adds it
 	at the front of the list */
-void	ft_node_add_front(t_struct *s, char *cmd_name)
+/*void	ft_node_add_front(t_struct *s, char *cmd_name)
 {
 	(void) s;
 	(void) cmd_name;
 	ft_node_create("ggg");
-	/*t_list	*temp;
+	t_list	*temp;
 
 	if (!s || !cmd_name)
 		return ;
@@ -147,5 +161,5 @@ void	ft_node_add_front(t_struct *s, char *cmd_name)
 		temp->next = s->cmd;
 		s->cmd->prev = temp;
 	}
-	s->cmd = temp;*/
-}
+	s->cmd = temp;
+}*/

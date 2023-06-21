@@ -21,6 +21,7 @@ void    ft_error(t_struct *s, int error, char *name)
 
     if (!name)
         return ;
+	str = NULL;
 	if (error == SYNTAX || error == PIPE || error == FORK || error == MALLOC)
 		ft_functions_error(error);
 	else if (error == EXECVE)

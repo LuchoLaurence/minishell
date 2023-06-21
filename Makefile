@@ -18,13 +18,15 @@ SRC_FILES =	\
 			error.c \
 			exec.c \
 			exec2.c \
-			ft_free_everything.c \
+			free.c \
+			free2.c \
 			ft_struct_init.c \
 			get_last_infile.c \
 			lexer.c \
 			main.c \
 			open_files_get_fds.c \
-			open_here_doc.c
+			open_here_doc.c \
+			wait_all_processes.c
 SRC =	$(UTL) $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 OBJ_DIR = ./objs

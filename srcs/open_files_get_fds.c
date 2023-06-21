@@ -56,13 +56,13 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 int	ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed)
 {
 	t_redirec	*temp_redire;
-	int			open_fd_in_temp;
 	int			error_code;
 
 	if (!s || !parsed)
 		return (0);
 	error_code = 0;
 	temp_redire = parsed->redirection;
+	printf("temp_redire = %p\n", temp_redire);
 	while (temp_redire)
 	{
 		if (temp_redire->type == redirect_in)
@@ -74,7 +74,7 @@ int	ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed)
 			return (ft_close_all_previous_files_error(parsed), 1);
 		temp_redire = temp_redire->next;
 	}
-	ft_get_last_infile(parsed);
+	ft_get_fd_last_infile(parsed);
 	return (0);
 }
 

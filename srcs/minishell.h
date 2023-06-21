@@ -5,17 +5,22 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define SYNTAX 1
-# define MALLOC 2
-# define PIPE 3
-# define FORK 4
-# define FIILE 5
-# define EXECVE 6
+# define STDIN 0
+# define STDOUT 1
+# define SYNTAX 2
+# define MALLOC 3
+# define PIPE 4
+# define FORK 5
+# define FIILE 6
+# define EXECVE 7
 
 # define PERMISSION_DENIED 1
 
 # include <errno.h>
 # include <fcntl.h>
+
+
+# include <stdio.h>
 
 typedef enum e_token_type
 {
@@ -83,13 +88,12 @@ typedef struct s_struct
 	t_parsed	*parsed;
 	int			*pipe_fd;				// for 3 fds technique
 										// check les //
-	char		*path_tab;
+	char		**path_tab;
 	int			previous_fd;
-	int			i_cmd;
+	int			fd_in_saved;
+	int			fd_out_saved;
 	int			i;
 	int			j;
-	int			nb_cmd;
-	int			nb_pipe;
 	int			error;
 }	t_struct;
 
@@ -106,8 +110,11 @@ void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 /*	Exec */
 
 //void	ft_close_all_previous_files(t_parsed *parsed);
+char	*ft_check_access(char **path_tab, char *cmd_name);
 void	ft_execution(t_struct *s, t_parsed *parsed);
-void	ft_get_last_infile(t_parsed *parsed);
+void	ft_exec(t_struct *s);
+//void	ft_get_last_infile(t_parsed *parsed);
+void	ft_get_fd_last_infile(t_parsed *parsed);
 int		ft_open_double_redirect_in(t_struct *s, t_parsed *parsed);
 int		ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed);
 void	ft_wait_all_processes(t_struct *s);
@@ -115,7 +122,10 @@ void	ft_wait_all_processes(t_struct *s);
 /*  Freeing */
 
 //void	ft_free_everything(t_struct *s);
+void	ft_free_parsed(t_struct *s);
 void	ft_free_ptr(void *ptr);
+void	ft_free_structs(t_struct *s);
+void	ft_free_tab(void **tab);
 
 /*  Lexer */
 

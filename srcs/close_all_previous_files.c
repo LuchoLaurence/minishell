@@ -15,7 +15,7 @@ static void	ft_close_double_redirec_parsed(t_parsed *parsed)
 			!= parsed->fd_in)
 		{
 			close(temp_redirec->here_d_pipe_fd[0]);
-			ft_free_ptr(temp_redirec->here_d_pipe_fd);
+			ft_free_ptr((void **) &(temp_redirec->here_d_pipe_fd));
 			temp_redirec->here_d_pipe_fd = NULL;
 		}
 		temp_redirec = temp_redirec->next;

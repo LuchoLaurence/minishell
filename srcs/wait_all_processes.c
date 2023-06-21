@@ -8,7 +8,7 @@ void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed)
 
 	if (!s || !parsed)
 		return ;
-	temp = ft_check_access(s->envp, parsed->command[0]);
+	temp = ft_check_access(s->path_tab, parsed->command[0]);
 	if (temp == NULL)
 	{
 		parsed->error = 127;
