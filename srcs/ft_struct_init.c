@@ -47,14 +47,12 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->parsed = NULL;
 	ft_struct_envp(s, envp);
 	s->path_tab = ft_get_path_envp_tab(s->envp);
-	s->fd_in_saved = open(";ljkzxcvhafdl;j", O_RDONLY | O_CREAT, 0644);
-	s->fd_out_saved = open("jalsjasdgrqwbasqwrjlzcvdf", O_RDONLY | O_CREAT, 0644);
+	s->fd_in_saved = dup(STDIN_FILENO);
+	s->fd_out_saved = dup(STDOUT_FILENO);
 	s->pipe_fd = malloc(sizeof(int) * 2);
 	if (!(s->pipe_fd))
 		return (ft_error(s, MALLOC, "malloc"));
 	s->i = 0;
 	s->j = 0;
 	s->error = 0;
-	dup2(STDIN_FILENO, s->fd_in_saved);
-	dup2(STDOUT_FILENO, s->fd_out_saved);
 }

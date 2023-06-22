@@ -44,4 +44,3 @@ void	ft_close_all_previous_files_error(t_parsed *parsed)
 		temp_redirec = temp_redirec->next;
 	}
 }
-

@@ -5,10 +5,14 @@
 static void	ft_child_process_hd(t_redirec *re)
 {
 	char	*line;
+	char	*stock;
 
 	if (!re)
 		return ;
 	close(re->here_d_pipe_fd[0]);
+	stock = re->filename;
+	re->filename = ft_strjoin(stock, "\n");
+	free(stock);
 	while (1)
 	{
 		line = readline("> ");

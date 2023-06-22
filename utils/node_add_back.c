@@ -5,15 +5,13 @@ static t_parsed	*ft_create_parsed_node(char **command)
 {
 	t_parsed	*parsed_node;
 
-	//if (!command)
-	//	return (NULL);
 	parsed_node = malloc(sizeof(t_parsed));
 	if (!parsed_node)
 		return (NULL);
 	parsed_node->command = command;
 	parsed_node->path = NULL;
 	parsed_node->redirection = NULL;
-	//parsed_node->pipe_fd = NULL;
+	parsed_node->last_redire = NULL;
 	parsed_node->here_d_pipe_fd = NULL;
 	parsed_node->fd_in = 0;
 	parsed_node->fd_out = 0;
@@ -37,26 +35,12 @@ void	ft_node_add_back_parsed(t_struct *s, char **command)
 		s->parsed = last;
 	else
 	{
-		/*temp = s->parsed;
-		while (s->parsed->next)
-			s->parsed = s->parsed->next;
-		last->prev = s->parsed;
-		s->parsed->next = last;
-		s->parsed = temp;*/
 		temp = s->parsed;
 		while (temp->next)
 			temp = temp->next;
 		last->prev = temp;
 		temp->next = last;
 	}
-/*	printf("s->parsed = %p\n", s->parsed);
-	if (s->parsed)
-	{
-		printf("s->parsed->next = %p\n", s->parsed->next);
-		if (s->parsed->next)
-			printf("s->parsed->next->prev = %p\n", s->parsed->next->prev);
-		printf("s->parsed->prev = %p\n", s->parsed->prev);
-	}*/
 }
 
 /*	void ft_node_add_back_parsed creates a envp node and adds it at
@@ -139,27 +123,3 @@ void	ft_node_add_back_redirec(t_parsed *parsed, t_Tokentype type)
 	}
 	parsed->last_redire = last;
 }
-
-/*  ft_node_add_front creates a node calling ft_node_create and adds it
-	at the front of the list */
-/*void	ft_node_add_front(t_struct *s, char *cmd_name)
-{
-	(void) s;
-	(void) cmd_name;
-	ft_node_create("ggg");
-	t_list	*temp;
-
-	if (!s || !cmd_name)
-		return ;
-	temp = ft_node_create(cmd_name);
-	if (!temp)
-		return ;
-	if (!s->cmd)
-		s->last_cmd = temp;
-	if (s->cmd)
-	{
-		temp->next = s->cmd;
-		s->cmd->prev = temp;
-	}
-	s->cmd = temp;
-}*/

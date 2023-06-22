@@ -75,7 +75,6 @@ char	**ft_split_add_slash(char const *s)
 	i = -1;
 	nb = 0;
 	while (s[++i])
-		//if (s[i] != c)
 		if (!(ft_is_charset(s[i])))
 			stock[nb++] = ft_deploiementmot(&s[i], &i);
 	stock[nb] = NULL;

@@ -5,16 +5,17 @@ void	ft_free_redire(t_parsed *parsed)
 {
 	t_redirec	*temp;
 
-	if (!parsed)
+	if (!parsed || (parsed && !(parsed->redirection)))
 		return ;
 	temp = parsed->redirection;
 	while (temp)
 	{
 		ft_free_ptr((void *)temp->filename);
 		ft_free_ptr((void *)temp->here_d_pipe_fd);
-		ft_free_ptr((void *)temp->prev);
+		temp->prev = NULL;
 		parsed->redirection = temp->next;
-		ft_free_ptr((void *)temp);
+		if (temp)
+			free(temp);
 		temp = parsed->redirection;
 	}
 }
@@ -38,4 +39,5 @@ void	ft_free_parsed(t_struct *s)
 		ft_free_ptr((void *)temp);
 		temp = s->parsed;
 	}
+	s->parsed = NULL;
 }

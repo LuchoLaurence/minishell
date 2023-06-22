@@ -43,7 +43,7 @@ void	ft_execution(t_struct *s, t_parsed *parsed)
 	while (parsed->command && parsed->command[i])
 		i++;
 	printf("ft_execution : i = %d\n", i);*/
-	write(2, "inside ft_execution\n", 20);
+//	write(2, "inside ft_execution\n", 20);
 	execve(parsed->command[0], parsed->command, NULL);
 	parsed->path = ft_check_access(s->path_tab, parsed->command[0]);
 	if (execve(parsed->path, parsed->command, NULL) < 0)

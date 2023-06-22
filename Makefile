@@ -40,7 +40,7 @@ $(OBJ_DIR)/$(UTL_DIR):
 
 $(NAME): $(OBJ) $(LIB_DIR)/$(LIB)
 	@echo "Compiling Executable"
-	$(CC) $(CFLAGS) $(LIB_DIR)/$(LIB) -o $(NAME) $(OBJ) -lreadline
+	$(CC) $(CFLAGS) $(LIB_DIR)/$(LIB) -g -o $(NAME) $(OBJ) -lreadline
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
