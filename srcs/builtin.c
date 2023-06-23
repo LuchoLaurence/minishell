@@ -30,6 +30,7 @@ void	ft_change_pwd(t_struct *s, char *new_pwd)
 	temp = s->envp;
 	while (temp)
 	{
+		printf("temp->value = %s\n", temp->value[0]);
 		if (!ft_strncmp("PWD", temp->value[0], ft_strlen(temp->value[0])))
 		{
 			old_pwd = temp->value[0];
@@ -46,20 +47,28 @@ int	ft_cd(t_struct *s, t_parsed *p)
 {
 	char	*home_value;
 	char	*new_pwd;
+	char	*buff;
 
 	if (!s || !p)
 		return (1);
 	home_value = ft_get_env_value(s, "HOME=");
 	new_pwd = NULL;
 		printf("ici\n");
+	buff = malloc(sizeof(char) * (4096 + 1));
+	if (!buff)
+		return (1);
 	if (p->command)
 	{
+		printf("p->command[1] = %s\n", p->command[1]);
+		printf("home_value = %s\n", home_value);
 		if (p->command[1])
 			chdir(p->command[1]);
 		else if (home_value)
 			chdir(home_value);
-		new_pwd = getcwd(NULL, 0);
+		new_pwd = getcwd(buff, 4096 + 1);
+		printf("new_pwd = %s\n", new_pwd);
 		ft_change_pwd(s, ft_strdup(new_pwd));
+		free(buff);
 	}
 	else
 		write(2, "minishell: cd: HOME not set\n", 28);
