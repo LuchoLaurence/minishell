@@ -84,7 +84,9 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	else
 		ft_get_last_cmd_code(s, parsed);
-	//ft_do_cd(s, parsed);
+	if (!ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
+		&& !(parsed->next) && !(parsed->prev))
+		ft_cd(s, parsed);
 	parsed->pid = fork();
 	if (parsed->pid < 0)
 	{

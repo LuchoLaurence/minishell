@@ -1,5 +1,47 @@
 #include "minishell.h"
 
+void	ft_check_old_pwd(t_struct *s, char *old_pwd)
+{
+	t_envp	*temp;
+
+	if (!s || !old_pwd)
+		return ;
+	temp = s->envp;
+	while (temp)
+	{
+		if (!ft_strncmp("OLDPWD", temp->value[0], ft_strlen(temp->value[0])))
+		{
+			temp->value[0] = old_pwd;
+			return ;
+		}
+		temp = temp->next;
+	}
+	ft_node_add_back_envp(s, &old_pwd);
+}
+
+void	ft_change_pwd(t_struct *s, char *new_pwd)
+{
+	t_envp	*temp;
+	char	*old_pwd;
+
+	if (!s)
+		return ;
+	/*	check for pwd node */
+	temp = s->envp;
+	while (temp)
+	{
+		if (!ft_strncmp("PWD", temp->value[0], ft_strlen(temp->value[0])))
+		{
+			old_pwd = temp->value[0];
+			temp->value[0] = new_pwd;
+			ft_check_old_pwd(s, old_pwd);
+			return ;
+			//ft_node_add_back_envp(s, &old_pwd);
+		}
+		temp = temp->next;
+	}
+}
+
 int	ft_cd(t_struct *s, t_parsed *p)
 {
 	char	*home_value;
@@ -9,6 +51,7 @@ int	ft_cd(t_struct *s, t_parsed *p)
 		return (1);
 	home_value = ft_get_env_value(s, "HOME=");
 	new_pwd = NULL;
+		printf("ici\n");
 	if (p->command)
 	{
 		if (p->command[1])
@@ -16,6 +59,7 @@ int	ft_cd(t_struct *s, t_parsed *p)
 		else if (home_value)
 			chdir(home_value);
 		new_pwd = getcwd(NULL, 0);
+		ft_change_pwd(s, ft_strdup(new_pwd));
 	}
 	else
 		write(2, "minishell: cd: HOME not set\n", 28);
