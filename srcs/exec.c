@@ -16,6 +16,8 @@ static void	ft_child_process_stdin(t_struct *s, t_parsed *parsed)
 		if (dup2(s->previous_fd, STDIN_FILENO) == -1)
 			perror("dup2");
 	}
+	else
+		dup2(s->fd_in_saved, STDIN_FILENO);
 	close(s->previous_fd);
 }
 
@@ -39,8 +41,10 @@ static void ft_child_process(t_struct *s, t_parsed *parsed)
 			perror("dup2");
 		close(s->pipe_fd[1]);
 	}
-	//write(1, "avant ft_execution\n", 19);
-	ft_execution(s, parsed);
+	else
+		dup2(s->fd_out_saved, STDOUT_FILENO);
+	if (ft_strncmp("cd", parsed->command[0], ft_strlen(parsed->command[0])))
+		ft_execution(s, parsed);
 	//ft_free_everything(s, parsed);
 	exit(1);
 }
@@ -49,7 +53,6 @@ static void	ft_parent_process(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !parsed)
 		return ;
-	//printf("entree parent process\n");
 	if (parsed->fd_in)
 		close(parsed->fd_in);
 	if (parsed->fd_out)	
@@ -66,17 +69,14 @@ static void	ft_parent_process(t_struct *s, t_parsed *parsed)
 	}
 	if (!(parsed->next))
 		ft_wait_all_processes(s);
-	//if (s->i_cmd >= 0 && s->parsed->next)
 	if (parsed->next)
 		close(s->pipe_fd[0]);
-	//printf("sortie parent process\n");
 }
 
 static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !(parsed->command))
 		return ;
-	//printf("entree pipe_and_fork\n");
 	if (parsed->next)
 	{
 		if (pipe(s->pipe_fd) < 0)
@@ -84,8 +84,7 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	else
 		ft_get_last_cmd_code(s, parsed);
-	//if (!(parsed->prev) && parsed->next)
-		//dup2(s->pipe_fd[0], s->previous_fd);
+	//ft_do_cd(s, parsed);
 	parsed->pid = fork();
 	if (parsed->pid < 0)
 	{
@@ -95,7 +94,6 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	if (parsed->pid == 0)
 		ft_child_process(s, parsed);
 	ft_parent_process(s, parsed);
-	//printf("sortie pipe_and_fork\n");
 }
 
 void ft_exec(t_struct *s)

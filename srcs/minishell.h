@@ -86,6 +86,7 @@ typedef struct s_struct
 	t_envp		*last_envp;
 	t_token		*token;
 	t_parsed	*parsed;
+	char		**envp_char;
 	int			*pipe_fd;				// for 3 fds technique
 										// check les //
 	char		**path_tab;
@@ -99,7 +100,8 @@ typedef struct s_struct
 
 /*	Built_ins */
 
-void	ft_pwd(void);
+int		ft_cd(t_struct *s, t_parsed *p);
+int		ft_pwd(void);
 
 /*  Errors */
 
@@ -113,6 +115,7 @@ void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 char	*ft_check_access(char **path_tab, char *cmd_name);
 void	ft_execution(t_struct *s, t_parsed *parsed);
 void	ft_exec(t_struct *s);
+int		ft_find_built_in(t_struct *s, t_parsed *parsed);
 //void	ft_get_last_infile(t_parsed *parsed);
 void	ft_get_fd_last_infile(t_parsed *parsed);
 int		ft_open_double_redirect_in(t_struct *s, t_parsed *parsed);
@@ -133,6 +136,7 @@ void	ft_lexer(t_struct *s, char *line);
 
 /*	Init */
 
+char	*ft_get_env_value(t_struct *s, char *env_name);
 char	**ft_get_path_envp_tab(t_envp *envp);
 void	ft_struct_init(t_struct *s, char **envp);
 

@@ -22,6 +22,7 @@ static void	ft_child_process_hd(t_redirec *re)
 			break;
 		}
 		write(re->here_d_pipe_fd[1], line, ft_strlen(line));
+		write(re->here_d_pipe_fd[1], "\n", 1);
 		ft_free_ptr((void *)line);
 	}
 	close(re->here_d_pipe_fd[1]);

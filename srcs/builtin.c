@@ -1,25 +1,37 @@
 #include "minishell.h"
 
-int	ft_cd(t_struct *s, char *path)
+int	ft_cd(t_struct *s, t_parsed *p)
 {
-	if (!path)
-		return (ft_error(s, SYNTAX, "syntax"), -1);
-	if (chdir(path) == -1)
+	char	*home_value;
+	char	*new_pwd;
+
+	if (!s || !p)
+		return (1);
+	home_value = ft_get_env_value(s, "HOME=");
+	new_pwd = NULL;
+	if (p->command)
 	{
-		perror(path);
-		return (-1);
+		if (p->command[1])
+			chdir(p->command[1]);
+		else if (home_value)
+			chdir(home_value);
+		new_pwd = getcwd(NULL, 0);
 	}
+	else
+		write(2, "minishell: cd: HOME not set\n", 28);
 	return (0);
 }
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*current_path;
 	char	*buff;
 
 	buff = malloc(sizeof(char) * (4096 + 1));
 	if (!buff)
-		return ;
+		return (1);
 	current_path = getcwd(buff, 4096);
-	write(1, current_path, ft_strlen(current_path));
+	write(STDOUT_FILENO, current_path, ft_strlen(current_path));
+	write(STDOUT_FILENO, "\n", 1);
+	return (0);
 }

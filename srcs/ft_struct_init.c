@@ -1,5 +1,28 @@
 #include "minishell.h"
 
+/*	char *ft_get_env_value returns the value for the env name value given
+	or NULL if it does not find it */
+char	*ft_get_env_value(t_struct *s, char *env_name)
+{
+	char	*env_value;
+	t_envp	*t;
+
+	if (!env_name)
+		return (NULL);
+	env_value = NULL;
+	t = s->envp;
+	while (t)
+	{
+		if (!ft_strncmp(t->value[0], env_name, ft_strlen(t->value[0])))
+		{
+			env_value = s->envp->value[1];
+			break ;
+		}
+		t = t->next;
+	}
+	return (env_value);
+}
+
 /*	char **ft_get_path_envp_tab gets the envp node that contains
 	the name "PATH=" */
 char	**ft_get_path_envp_tab(t_envp *envp)
@@ -11,7 +34,7 @@ char	**ft_get_path_envp_tab(t_envp *envp)
 		return (NULL);
 	temp_envp = envp;
 	path_tab = NULL;
-	while (temp_envp && ft_strncmp(temp_envp->value[0], "PATH/", 5))
+	while (temp_envp && ft_strncmp(temp_envp->value[0], "PATH", 4))
 		temp_envp = temp_envp->next;
 	if (temp_envp)
 		path_tab = temp_envp->value;

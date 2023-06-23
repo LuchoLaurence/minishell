@@ -156,6 +156,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!s)
 		return (ft_error(s, MALLOC, "malloc"), 1);
 	ft_struct_init(s, envp);
+	s->envp_char = envp;
 	//ft_check_std(s);
 	while (1)
 	{

@@ -14,12 +14,14 @@ UTL =	$(addprefix $(UTL_DIR)/, $(UTL_FILES))
 
 SRC_DIR =	./srcs
 SRC_FILES =	\
+			builtin.c \
 			close_all_previous_files.c \
 			error.c \
 			exec.c \
 			exec2.c \
 			free.c \
 			free2.c \
+			find_built_in.c \
 			ft_struct_init.c \
 			get_last_infile.c \
 			lexer.c \
