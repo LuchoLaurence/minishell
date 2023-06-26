@@ -15,7 +15,7 @@ char	*ft_get_env_value(t_struct *s, char *env_name)
 	{
 		if (!ft_strncmp(t->value[0], env_name, ft_strlen(t->value[0])))
 		{
-			env_value = s->envp->value[1];
+			env_value = t->value[1];
 			break ;
 		}
 		t = t->next;
@@ -75,6 +75,8 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->pipe_fd = malloc(sizeof(int) * 2);
 	if (!(s->pipe_fd))
 		return (ft_error(s, MALLOC, "malloc"));
+	s->old_pwd_memory = NULL;
+	s->unset_oldpwd = 0;
 	s->i = 0;
 	s->j = 0;
 	s->error = 0;

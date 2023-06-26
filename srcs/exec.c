@@ -43,7 +43,7 @@ static void ft_child_process(t_struct *s, t_parsed *parsed)
 	}
 	else
 		dup2(s->fd_out_saved, STDOUT_FILENO);
-	if (ft_strncmp("cd", parsed->command[0], ft_strlen(parsed->command[0])))
+	//if (parsed->command && ft_strncmp("cd", parsed->command[0], ft_strlen(parsed->command[0])))
 		ft_execution(s, parsed);
 	//ft_free_everything(s, parsed);
 	exit(1);
@@ -75,7 +75,7 @@ static void	ft_parent_process(t_struct *s, t_parsed *parsed)
 
 static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 {
-	if (!s || !(parsed->command))
+	if (!s)
 		return ;
 	if (parsed->next)
 	{
@@ -84,9 +84,6 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	else
 		ft_get_last_cmd_code(s, parsed);
-	if (!ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
-		&& !(parsed->next) && !(parsed->prev))
-		ft_cd(s, parsed);
 	parsed->pid = fork();
 	if (parsed->pid < 0)
 	{
@@ -95,6 +92,9 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	if (parsed->pid == 0)
 		ft_child_process(s, parsed);
+	if (parsed->command && !ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
+		&& !(parsed->next) && !(parsed->prev))
+		ft_cd(s, parsed);
 	ft_parent_process(s, parsed);
 }
 
@@ -116,5 +116,4 @@ void ft_exec(t_struct *s)
 	}
 	dup2(s->fd_in_saved, STDIN_FILENO);
 	dup2(s->fd_out_saved, STDOUT_FILENO);
-//	printf("sortie exec\n");
 }

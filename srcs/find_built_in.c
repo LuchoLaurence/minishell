@@ -2,15 +2,19 @@
 
 int	ft_find_built_in(t_struct *s, t_parsed *parsed)
 {
-	t_parsed	*p;
+	char	*cmd;
 
 	if (!s || !parsed)
 		return (1);
-	p = parsed;
-	/*if (!ft_strncmp(p->command[0], "cd", ft_strlen(p->command[0]))
-		&& !(parsed->next) && !(parsed->prev))
-		return (ft_cd(s, p));
-	else */if (!ft_strncmp(p->command[0], "pwd", ft_strlen(p->command[0])))
+	cmd = parsed->command[0];
+	if (!(parsed->next) && !(parsed->prev))
+	{
+		if (!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+			return (0);
+	}
+	else if (!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
 		return (ft_pwd());
+	else if (!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+		return (ft_env(s));
 	return (1);
 }

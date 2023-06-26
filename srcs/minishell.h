@@ -90,6 +90,8 @@ typedef struct s_struct
 	int			*pipe_fd;				// for 3 fds technique
 										// check les //
 	char		**path_tab;
+	char		*old_pwd_memory;
+	int			unset_oldpwd;
 	int			previous_fd;
 	int			fd_in_saved;
 	int			fd_out_saved;
@@ -101,6 +103,7 @@ typedef struct s_struct
 /*	Built_ins */
 
 int		ft_cd(t_struct *s, t_parsed *p);
+int		ft_env(t_struct *s);
 int		ft_pwd(void);
 
 /*  Errors */
@@ -147,6 +150,7 @@ void	ft_node_add_back_envp(t_struct *s, char **value);
 void	ft_node_add_back_parsed(t_struct *s, char **command);
 void	ft_node_add_back_redirec(t_parsed *parsed, t_Tokentype type);
 void	ft_node_add_back_token(t_struct *s, char *str);
+void	ft_node_remove_envp(t_struct *s, t_envp *node);
 char	**ft_minisplit(char *line, char c);
 char	**ft_split_add_slash(char const *s);
 

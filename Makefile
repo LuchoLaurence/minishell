@@ -9,12 +9,14 @@ UTL_DIR =	utils
 UTL_FILES =	\
 			ft_split_add_slash.c \
 			minisplit.c \
-			node_add_back.c
+			node_add_back.c \
+			node_remove.c
 UTL =	$(addprefix $(UTL_DIR)/, $(UTL_FILES))
 
 SRC_DIR =	./srcs
 SRC_FILES =	\
 			builtin.c \
+			builtin2.c \
 			close_all_previous_files.c \
 			error.c \
 			exec.c \

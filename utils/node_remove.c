@@ -1,6 +1,28 @@
 #include "../srcs/minishell.h"
 
-static void	ft_free_redirec_content(t_redirec *redirec)
+void	ft_node_remove_envp(t_struct *s, t_envp *node)
+{
+	t_envp	*temp;
+	t_envp	*next_node;
+
+	if (!s || !node)
+		return ;
+	temp = node->prev;
+	next_node = node->next;
+	if (!temp)
+		s->envp = next_node;
+	else if (temp)
+		temp->next = next_node;
+	if (next_node)
+		next_node->prev = temp;
+	if (s->last_envp == node)
+		s->last_envp = temp;
+	ft_free_tab((void **) node->value);
+	ft_free_ptr((void *) node);
+	node = NULL;
+}
+
+/*static void	ft_free_redirec_content(t_redirec *redirec)
 {
 	if (!redirec)
 		return ;
@@ -47,4 +69,4 @@ void	ft_node_remove_redirec(t_parsed *parsed, t_redirec *redirec, int fd)
 	if (next_re)
 		next_re->prev = prev_re;
 	ft_free_redirec_content(temp);
-}
+}*/

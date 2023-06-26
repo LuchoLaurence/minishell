@@ -31,6 +31,7 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 	if (parsed->fd_out)
 		close(parsed->fd_out);
 	parsed->fd_out = open("temp2", O_WRONLY | O_CREAT, 0644);
+	unlink("temp2");
 	if (redirection->filename)
 	{
 		if (redirection->type == redirect_out)
@@ -49,7 +50,6 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 	if (parsed->fd_out)
 		close(parsed->fd_out);
 	parsed->fd_out = redirection->fd;
-	unlink("temp2");
 	return (0);
 }
 
