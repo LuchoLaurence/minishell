@@ -92,9 +92,11 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	if (parsed->pid == 0)
 		ft_child_process(s, parsed);
-	if (parsed->command && !ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
+/*	if (parsed->command && !ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
 		&& !(parsed->next) && !(parsed->prev))
-		ft_cd(s, parsed);
+		ft_cd(s, parsed);*/
+	if (!(parsed->next) && !(parsed->prev))
+		ft_env_changing_builtin(s, parsed);
 	ft_parent_process(s, parsed);
 }
 

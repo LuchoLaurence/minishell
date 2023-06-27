@@ -16,7 +16,16 @@ int	ft_unset(t_struct *s, t_parsed *parsed)
 		{
 			ft_node_remove_envp(s, temp);
 			i++;
-			temp = s->envp;
+			/*if (!ft_strncmp("OLDPWD", parsed->command[i],
+				ft_strlen(parsed->command[i])))
+			{
+				s->unset_oldpwd = 1;
+				s->old_pwd_memory = 
+			}*/
+			if (parsed->command[i])
+				temp = s->envp;
+			else
+				break ;
 		}
 		else
 			temp = temp->next;
@@ -62,6 +71,6 @@ int	ft_env(t_struct *s)
 		write(STDOUT_FILENO, "\n", 1);
 		temp = temp->next;
 	}
-	printf("HOMEMADE\n");
+	write(STDOUT_FILENO, "HOMEMADE\n", 9);
 	return (0);
 }

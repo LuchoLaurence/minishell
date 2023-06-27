@@ -105,6 +105,7 @@ typedef struct s_struct
 int		ft_cd(t_struct *s, t_parsed *p);
 int		ft_env(t_struct *s);
 int		ft_pwd(void);
+int		ft_unset(t_struct *s, t_parsed *parsed);
 
 /*  Errors */
 
@@ -116,6 +117,7 @@ void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 
 //void	ft_close_all_previous_files(t_parsed *parsed);
 char	*ft_check_access(char **path_tab, char *cmd_name);
+void	ft_env_changing_builtin(t_struct *s, t_parsed *parsed);
 void	ft_execution(t_struct *s, t_parsed *parsed);
 void	ft_exec(t_struct *s);
 int		ft_find_built_in(t_struct *s, t_parsed *parsed);

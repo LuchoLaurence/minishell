@@ -164,12 +164,12 @@ int	ft_cd(t_struct *s, t_parsed *p)
 	}
 	else
 		write(2, "minishell: cd: HOME not set\n", 28);
-	t_envp	*temp = s->envp;
+	/*t_envp	*temp = s->envp;
 	while (temp)
 	{
 		printf("temp->value = %s == %s\n", temp->value[0], temp->value[1]);
 		temp = temp->next;
-	}
+	}*/
 	return (0);
 }
 
