@@ -1,5 +1,5 @@
 CC = @gcc
-CFLAGS = -Wall -Wextra -Werror -I ./srcs/minishell.h
+CFLAGS = -Wall -Wextra -Werror -I ./srcs/minishell.h -fsanitize=address -g
 RM = @rm -rf
 LIB_DIR = ./utils/libft
 LIB = libft.a
@@ -17,14 +17,19 @@ SRC_DIR =	./srcs
 SRC_FILES =	\
 			builtin.c \
 			builtin2.c \
+			builtin3.c \
+			builtin4.c \
+			change_env.c \
 			close_all_previous_files.c \
 			error.c \
 			exec.c \
 			exec2.c \
+			expander.c \
 			free.c \
 			free2.c \
 			find_built_in.c \
 			ft_struct_init.c \
+			envp_list_to_tab_string.c \
 			get_last_infile.c \
 			lexer.c \
 			main.c \

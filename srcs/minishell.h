@@ -54,12 +54,12 @@ typedef struct s_token
 
 typedef struct s_redirec
 {
-	struct s_redirec	*next;				// = NULL
-	struct s_redirec	*prev;				// = NULL
-	char				*filename;			// = NULL
-	int					*here_d_pipe_fd;	// = NULL
-	pid_t				pid;				// for here_doc
-	int					fd;					// = -1
+	struct s_redirec	*next;
+	struct s_redirec	*prev;
+	char				*filename;
+	int					*here_d_pipe_fd;
+	pid_t				pid;
+	int					fd;
 	t_Tokentype			type;
 }	t_redirec;
 
@@ -70,9 +70,7 @@ typedef struct s_parsed
 	pid_t			pid;
 	t_redirec		*redirection;
 	t_redirec		*last_redire;
-//	int				*pipe_fd;
 	int				*here_d_pipe_fd;
-	//int				previous_fd;
 	int				fd_in;
 	int				fd_out;
 	int				error;
@@ -87,11 +85,12 @@ typedef struct s_struct
 	t_token		*token;
 	t_parsed	*parsed;
 	char		**envp_char;
-	int			*pipe_fd;				// for 3 fds technique
-										// check les //
+	int			*pipe_fd;
 	char		**path_tab;
 	char		*old_pwd_memory;
+	char		*pwd_memory;
 	int			unset_oldpwd;
+	int			unset_pwd;
 	int			previous_fd;
 	int			fd_in_saved;
 	int			fd_out_saved;
@@ -103,7 +102,11 @@ typedef struct s_struct
 /*	Built_ins */
 
 int		ft_cd(t_struct *s, t_parsed *p);
+int		ft_echo(t_struct *s, t_parsed *parsed);
 int		ft_env(t_struct *s);
+int		ft_exit(t_struct *s, t_parsed * parsed);
+int		ft_export(t_struct *s, t_parsed *parsed);
+void	ft_print_envp_ascii_order(t_struct *s);
 int		ft_pwd(void);
 int		ft_unset(t_struct *s, t_parsed *parsed);
 
@@ -113,11 +116,16 @@ void	ft_close_all_previous_files_error(t_parsed *parsed);
 void	ft_error(t_struct *s, int error, char *name);
 void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 
+/*	Environment */
+
+void	ft_reassign_updated_envp_char(t_struct *s);
+void	ft_env_changing_builtin(t_struct *s, t_parsed *parsed);
+void	ft_change_underscore(t_struct *s, t_parsed *parsed);
+
 /*	Exec */
 
 //void	ft_close_all_previous_files(t_parsed *parsed);
 char	*ft_check_access(char **path_tab, char *cmd_name);
-void	ft_env_changing_builtin(t_struct *s, t_parsed *parsed);
 void	ft_execution(t_struct *s, t_parsed *parsed);
 void	ft_exec(t_struct *s);
 int		ft_find_built_in(t_struct *s, t_parsed *parsed);
@@ -141,6 +149,7 @@ void	ft_lexer(t_struct *s, char *line);
 
 /*	Init */
 
+char	**ft_envp_list_to_tab_string(t_envp	*envp);
 char	*ft_get_env_value(t_struct *s, char *env_name);
 char	**ft_get_path_envp_tab(t_envp *envp);
 void	ft_struct_init(t_struct *s, char **envp);

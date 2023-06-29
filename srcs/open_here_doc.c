@@ -72,15 +72,6 @@ void	ft_open_double_redirect_in_one_parsed(t_struct *s, t_parsed *parsed)
 			break ;
 		temp_redirec = temp_redirec->next;
 	}
-	/*while (temp_redirec)
-	{
-		if (temp_redirec->type == double_redirect_in && parsed->here_d_pipe_fd
-			!= temp_redirec->here_d_pipe_fd)
-			close(temp_redirec->here_d_pipe_fd[0]);
-		if (temp_redirec->prev == NULL)
-			break;
-		temp_redirec = temp_redirec->prev;
-	}*/
 }
 
 /*	int ft_open_double_redirect_in opens all the double_redirection_in and

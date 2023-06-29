@@ -95,25 +95,33 @@ void	ft_check_old_pwd(t_struct *s, char *old_pwd)
 	t_envp	*temp;
 	char	**value;
 
-	if (!s || !old_pwd)
+	if (!s)
 		return ;
 	temp = s->envp;
 	value = NULL;
 	while (temp)
 	{
-		printf("temp->name = %s === value = %s\n", temp->value[0], temp->value[1]);
 		if (!ft_strncmp("OLDPWD", temp->value[0], ft_strlen(temp->value[0])))
 		{
-			temp->value[1] = old_pwd;
+			if (temp->value[1])
+				free(temp->value[1]);
+				//ft_free_ptr((void *) temp->value[1]);
+			if (s->unset_pwd > 1)
+				temp->value[1] = ft_strdup(s->old_pwd_memory);
+			else
+				temp->value[1] = old_pwd;
+			if (!old_pwd && s->unset_pwd == 1)
+				s->unset_pwd += 1;
 			return ;
 		}
 		temp = temp->next;
 	}
-	value = malloc(sizeof(char *) * 2);
+	value = malloc(sizeof(char *) * (2 + 1));
 	if (!value)
 		return ;
 	value[0] = ft_strdup("OLDPWD");
 	value[1] = old_pwd;
+	value[2] = NULL;
 	ft_node_add_back_envp(s, value);
 }
 
@@ -125,6 +133,14 @@ void	ft_change_pwd(t_struct *s, char *new_pwd)
 	if (!s)
 		return ;
 	temp = s->envp;
+	if (s->pwd_memory)
+	{
+		if (s->old_pwd_memory)
+			ft_free_ptr((void *) s->old_pwd_memory);
+		s->old_pwd_memory = s->pwd_memory;
+	}
+	s->pwd_memory = ft_strdup(new_pwd);
+	old_pwd = NULL;
 	while (temp)
 	{
 		if (!ft_strncmp("PWD", temp->value[0], ft_strlen(temp->value[0])))
@@ -133,9 +149,15 @@ void	ft_change_pwd(t_struct *s, char *new_pwd)
 			temp->value[1] = new_pwd;
 			if (!(s->unset_oldpwd))
 				ft_check_old_pwd(s, old_pwd);
+			ft_reassign_updated_envp_char(s);
 			return ;
 		}
 		temp = temp->next;
+	}
+	if (s->unset_oldpwd == 0)
+	{
+		ft_check_old_pwd(s, old_pwd);
+		ft_reassign_updated_envp_char(s);
 	}
 }
 
@@ -155,7 +177,17 @@ int	ft_cd(t_struct *s, t_parsed *p)
 	if (p->command)
 	{
 		if (p->command[1])
-			chdir(p->command[1]);
+		{
+			if (!ft_strncmp("-", p->command[1], ft_strlen(p->command[1])))
+			{
+				if (chdir(ft_get_env_value(s, "OLDPWD")) == -1)
+					write(2, "minishell: cd: OLDPWD not set HOMEMADE\n", 3);
+				else
+					ft_pwd();
+			}
+			else
+				chdir(p->command[1]);
+		}
 		else if (home_value)
 			chdir(home_value);
 		new_pwd = getcwd(buff, 4096 + 1);
@@ -176,12 +208,12 @@ int	ft_cd(t_struct *s, t_parsed *p)
 int	ft_pwd(void)
 {
 	char	*current_path;
-	char	*buff;
+	char	buff[4096 + 1];
 
-	buff = malloc(sizeof(char) * (4096 + 1));
+	/*buff = malloc(sizeof(char) * (4096 + 1));
 	if (!buff)
-		return (1);
-	current_path = getcwd(buff, 4096);
+		return (1);*/
+	current_path = getcwd(buff, sizeof(buff));
 	write(STDOUT_FILENO, current_path, ft_strlen(current_path));
 	write(STDOUT_FILENO, "\n", 1);
 	return (0);

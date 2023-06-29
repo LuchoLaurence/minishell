@@ -18,7 +18,9 @@ int	ft_open_file_in(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 	}
 	if (parsed->fd_in)
 		close(parsed->fd_in);
-	parsed->fd_in = redirection->fd;
+	parsed->fd_in = dup(redirection->fd);
+	close(redirection->fd);
+//	parsed->fd_in = redirection->fd;
 	return (0);
 }
 
@@ -30,8 +32,8 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 		return (1);
 	if (parsed->fd_out)
 		close(parsed->fd_out);
-	parsed->fd_out = open("temp2", O_WRONLY | O_CREAT, 0644);
-	unlink("temp2");
+//	parsed->fd_out = open("temp2", O_WRONLY | O_CREAT, 0644);
+//	unlink("temp2");
 	if (redirection->filename)
 	{
 		if (redirection->type == redirect_out)
@@ -49,7 +51,9 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 	}
 	if (parsed->fd_out)
 		close(parsed->fd_out);
-	parsed->fd_out = redirection->fd;
+	//parsed->fd_out = redirection->fd;
+	parsed->fd_out = dup(redirection->fd);
+	close (redirection->fd);
 	return (0);
 }
 
@@ -79,27 +83,4 @@ int	ft_open_files_inside_pipe(t_struct *s, t_parsed *parsed)
 	}
 	ft_get_fd_last_infile(parsed);
 	return (0);
-}
-
-/*	void ft_open_files_get_fds opens all double_redirection_in from every
-	parsed struct first,
-	then taking one parsed struct at a time, it opens all the other files
-	(in, out and double_redirection_out) in the right order until we do not
-	have permission.
-	if every redirection_in can be opened, it stores the last one's fd_in, same
-	for the redirection_out/double_redirection_out, it stores the last
-	one's fd_out */
-void	ft_open_files_get_fds(t_struct *s)
-{
-	t_parsed	*index_parsed;
-
-	if (!s)
-		return ;
-	index_parsed = s->parsed;
-	ft_open_double_redirect_in(s, index_parsed);
-	while (index_parsed)
-	{
-		ft_open_files_inside_pipe(s, index_parsed);
-		index_parsed = index_parsed->next;
-	}
 }

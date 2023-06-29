@@ -42,8 +42,8 @@ static char	*ft_deploiementmot(char const *strpos, int *i)
 		j++;
 	stock = ft_substr(strpos, 0, j);
 	*i = *i + j - 1;
-	if (!ft_strncmp(stock, "PATH", 4))
-		return (stock);
+	/*if (!ft_strncmp(stock, "PATH", 4))
+		return (stock);*/
 	str = ft_strjoin(stock, "/");
 	free(stock);
 	return (str);

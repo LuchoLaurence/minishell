@@ -17,8 +17,10 @@ void	ft_node_remove_envp(t_struct *s, t_envp *node)
 		next_node->prev = temp;
 	if (s->last_envp == node)
 		s->last_envp = temp;
-	ft_free_tab((void **) node->value);
+	printf("AVANT PROBLEM MALLOC NODE ENVP\n");
+	//ft_free_tab((void **) node->value);
 	ft_free_ptr((void *) node);
+	printf("APRES PROBLEM MALLOC NODE ENVP\n");
 	node = NULL;
 }
 

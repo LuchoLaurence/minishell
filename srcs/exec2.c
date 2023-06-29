@@ -12,12 +12,10 @@ char	*ft_check_access(char **path_tab, char *cmd_name)
 	char	*path_accessible;
 	int		i;
 	
-	//if (!envp || !cmd_name)
 	if (!path_tab || !cmd_name)
 		return (NULL);
 	stock = NULL;
 	path_accessible = NULL;
-	//path_tab = ft_get_path_envp_tab(envp);
 	i = 1;
 	while (path_tab[i])
 	{

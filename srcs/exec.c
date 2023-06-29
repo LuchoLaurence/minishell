@@ -8,13 +8,14 @@ static void	ft_child_process_stdin(t_struct *s, t_parsed *parsed)
 		close(s->pipe_fd[0]);
 	if (parsed->fd_in)
 	{
-		dup2(parsed->fd_in, STDIN_FILENO);
+		if (dup2(parsed->fd_in, STDIN_FILENO) == -1)
+			perror("dup2 fd_in");
 		close(parsed->fd_in);
 	}
 	else if (!(parsed->fd_in) && parsed->prev)
 	{
 		if (dup2(s->previous_fd, STDIN_FILENO) == -1)
-			perror("dup2");
+			perror("dup2 previous_fd");
 	}
 	else
 		dup2(s->fd_in_saved, STDIN_FILENO);
@@ -43,9 +44,9 @@ static void ft_child_process(t_struct *s, t_parsed *parsed)
 	}
 	else
 		dup2(s->fd_out_saved, STDOUT_FILENO);
-	//if (parsed->command && ft_strncmp("cd", parsed->command[0], ft_strlen(parsed->command[0])))
-		ft_execution(s, parsed);
-	//ft_free_everything(s, parsed);
+	if (!(parsed->command))
+		exit(0);
+	ft_execution(s, parsed);
 	exit(1);
 }
 
@@ -69,8 +70,6 @@ static void	ft_parent_process(t_struct *s, t_parsed *parsed)
 	}
 	if (!(parsed->next))
 		ft_wait_all_processes(s);
-	if (parsed->next)
-		close(s->pipe_fd[0]);
 }
 
 static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
@@ -92,9 +91,6 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	if (parsed->pid == 0)
 		ft_child_process(s, parsed);
-/*	if (parsed->command && !ft_strncmp(parsed->command[0], "cd", ft_strlen(parsed->command[0]))
-		&& !(parsed->next) && !(parsed->prev))
-		ft_cd(s, parsed);*/
 	if (!(parsed->next) && !(parsed->prev))
 		ft_env_changing_builtin(s, parsed);
 	ft_parent_process(s, parsed);
@@ -103,14 +99,16 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 void ft_exec(t_struct *s)
 {
 	t_parsed	*parsed;
+
 	if (!s)
 		return ;
 	parsed = s->parsed;
 	if (parsed->redirection)
 		ft_open_double_redirect_in(s, parsed);
-	s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
-	//ft_open_files_get_fds(s);							// open all files and get fds
-	unlink("jalsjrqwbzvljafsd");
+//	s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
+//	unlink("jalsjrqwbzvljafsd");
+	s->previous_fd = dup(STDIN_FILENO);
+	ft_change_underscore(s, parsed);
 	while (parsed)
 	{
 		ft_pipe_and_fork(s, parsed);
