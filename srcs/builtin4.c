@@ -16,7 +16,24 @@ int	ft_echo(t_struct *s, t_parsed *parsed)
 	if (!s || !parsed)
 		return (1);
 	i = 1;
-	if (!ft_strncmp(parsed->command[1], "-n", ft_strlen(parsed->command[1])))
+/*	if (!(parsed->command[1]))
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		return (0);
+	}
+	if (parsed->command[1] && parsed->command[1][0] && parsed->command[1][0] == '-')
+	{
+		if (parsed->command[1][1])
+		{
+			while (parsed->command[1])
+		}
+		else
+			write(STDOUT_FILENO, "-", 1);
+		i++;
+	}*/
+	if (parsed->command[1] && parsed->command[1][0] == '-' && ft_strlen(parsed->command[1]) == 1)
+		write(STDOUT_FILENO, "-", 1);
+	if (parsed->command[1] && !ft_strncmp(parsed->command[1], "-n", 3))
 		i++;
 	while (parsed->command[i])
 	{
@@ -26,8 +43,11 @@ int	ft_echo(t_struct *s, t_parsed *parsed)
 			write(STDOUT_FILENO, " ", 1);
 		i++;
 	}
-	if (ft_strncmp(parsed->command[1], "-n", ft_strlen(parsed->command[1])))
+	if (ft_strncmp(parsed->command[1], "-n", 3))
+	{
+		write(2, "ok\n", 3);
 		write(STDOUT_FILENO, "\n", 1);
+	}
 	return (0);
 }
 

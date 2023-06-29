@@ -6,7 +6,7 @@
 /*   By: avan <avan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 16:52:17 by marvin            #+#    #+#             */
-/*   Updated: 2023/06/23 16:39:32 by avan             ###   ########.fr       */
+/*   Updated: 2023/06/29 17:20:31 by avan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static char	*ft_deploiementmot(char const *strpos, char c, int *i, char **stock)
 	return (str);
 }
 
+#include <stdio.h>
+
 /*	ft_split splits a string of char with a char and returns a char ** */
 char	**ft_split(char const *s, char c)
 {
@@ -82,5 +84,7 @@ char	**ft_split(char const *s, char c)
 		if (s[i] != c)
 			stock[nb++] = ft_deploiementmot(&s[i], c, &i, stock);
 	stock[nb] = NULL;
+	printf("stock[0] = %s\n", stock[0]);
+	printf("stock[1] = %s\n", stock[1]);
 	return (stock);
 }

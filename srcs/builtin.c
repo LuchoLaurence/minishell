@@ -1,93 +1,3 @@
-/*#include "minishell.h"
-
-void	ft_check_old_pwd(t_struct *s, char *old_pwd)
-{
-	t_envp	*temp;
-
-	if (!s || !old_pwd)
-		return ;
-	temp = s->envp;
-	while (temp)
-	{
-		if (!ft_strncmp("OLDPWD", temp->value[0], ft_strlen(temp->value[0])))
-		{
-			temp->value[0] = old_pwd;
-			return ;
-		}
-		temp = temp->next;
-	}
-	ft_node_add_back_envp(s, &old_pwd);
-}
-
-void	ft_change_pwd(t_struct *s, char *new_pwd)
-{
-	t_envp	*temp;
-	char	*old_pwd;
-
-	if (!s)
-		return ;
-	temp = s->envp;
-	while (temp)
-	{
-		printf("temp->value = %s\n", temp->value[0]);
-		if (!ft_strncmp("PWD", temp->value[0], ft_strlen(temp->value[0])))
-		{
-			old_pwd = temp->value[0];
-			temp->value[0] = new_pwd;
-			ft_check_old_pwd(s, old_pwd);
-			return ;
-			//ft_node_add_back_envp(s, &old_pwd);
-		}
-		temp = temp->next;
-	}
-}
-
-int	ft_cd(t_struct *s, t_parsed *p)
-{
-	char	*home_value;
-	char	*new_pwd;
-	char	*buff;
-
-	if (!s || !p)
-		return (1);
-	home_value = ft_get_env_value(s, "HOME=");
-	new_pwd = NULL;
-		printf("ici\n");
-	buff = malloc(sizeof(char) * (4096 + 1));
-	if (!buff)
-		return (1);
-	if (p->command)
-	{
-		printf("p->command[1] = %s\n", p->command[1]);
-		printf("home_value = %s\n", home_value);
-		if (p->command[1])
-			chdir(p->command[1]);
-		else if (home_value)
-			chdir(home_value);
-		new_pwd = getcwd(buff, 4096 + 1);
-		printf("new_pwd = %s\n", new_pwd);
-		ft_change_pwd(s, ft_strdup(new_pwd));
-		free(buff);
-	}
-	else
-		write(2, "minishell: cd: HOME not set\n", 28);
-	return (0);
-}
-
-int	ft_pwd(void)
-{
-	char	*current_path;
-	char	*buff;
-
-	buff = malloc(sizeof(char) * (4096 + 1));
-	if (!buff)
-		return (1);
-	current_path = getcwd(buff, 4096);
-	write(STDOUT_FILENO, current_path, ft_strlen(current_path));
-	write(STDOUT_FILENO, "\n", 1);
-	return (0);
-}*/
-
 #include "minishell.h"
 
 void	ft_check_old_pwd(t_struct *s, char *old_pwd)
@@ -105,38 +15,37 @@ void	ft_check_old_pwd(t_struct *s, char *old_pwd)
 		{
 			if (temp->value[1])
 				free(temp->value[1]);
-				//ft_free_ptr((void *) temp->value[1]);
 			if (s->unset_pwd > 1)
 				temp->value[1] = ft_strdup(s->old_pwd_memory);
 			else
 				temp->value[1] = old_pwd;
 			if (!old_pwd && s->unset_pwd == 1)
 				s->unset_pwd += 1;
-			return ;
+			return;
 		}
 		temp = temp->next;
 	}
 	value = malloc(sizeof(char *) * (2 + 1));
 	if (!value)
-		return ;
+		return;
 	value[0] = ft_strdup("OLDPWD");
 	value[1] = old_pwd;
 	value[2] = NULL;
 	ft_node_add_back_envp(s, value);
 }
 
-void	ft_change_pwd(t_struct *s, char *new_pwd)
+void ft_change_pwd(t_struct *s, char *new_pwd)
 {
-	t_envp	*temp;
-	char	*old_pwd;
+	t_envp *temp;
+	char *old_pwd;
 
 	if (!s)
-		return ;
+		return;
 	temp = s->envp;
 	if (s->pwd_memory)
 	{
 		if (s->old_pwd_memory)
-			ft_free_ptr((void *) s->old_pwd_memory);
+			ft_free_ptr((void *)s->old_pwd_memory);
 		s->old_pwd_memory = s->pwd_memory;
 	}
 	s->pwd_memory = ft_strdup(new_pwd);
@@ -150,7 +59,7 @@ void	ft_change_pwd(t_struct *s, char *new_pwd)
 			if (!(s->unset_oldpwd))
 				ft_check_old_pwd(s, old_pwd);
 			ft_reassign_updated_envp_char(s);
-			return ;
+			return;
 		}
 		temp = temp->next;
 	}
@@ -161,15 +70,42 @@ void	ft_change_pwd(t_struct *s, char *new_pwd)
 	}
 }
 
-int	ft_cd(t_struct *s, t_parsed *p)
+void	ft_cd_path_home(t_struct *s, t_parsed *p, char *home_value)
 {
-	char	*home_value;
-	char	*new_pwd;
-	char	*buff;
+	if (!s || !p)
+		return ;
+	if (!ft_strncmp("-", p->command[1], 1))
+	{
+		if (p->command[1][1])
+			write(2, "minishell: cd: invalid option\n", 30);
+		else
+		{
+			if (chdir(ft_get_env_value(s, "OLDPWD")) == -1)
+				write(2, "minishell: cd: OLDPWD not set HOMEMADE\n", 3);
+			else
+				ft_pwd();
+		}
+	}
+	if (!ft_strncmp("~", p->command[1], ft_strlen(p->command[1])))
+	{
+		if (chdir(home_value) == -1)
+			write(2, "minishell: cd: HOME not set\n", 28);
+	}
+	else
+		chdir(p->command[1]);
+}
+
+int ft_cd(t_struct *s, t_parsed *p)
+{
+	char *home_value;
+	char *new_pwd;
+	char *buff;
 
 	if (!s || !p)
 		return (1);
 	home_value = ft_get_env_value(s, "HOME");
+	if (!home_value && !(p->command[1]))
+		write(2, "minishell: cd: HOME not set\n", 28);
 	new_pwd = NULL;
 	buff = malloc(sizeof(char) * (4096 + 1));
 	if (!buff)
@@ -177,25 +113,13 @@ int	ft_cd(t_struct *s, t_parsed *p)
 	if (p->command)
 	{
 		if (p->command[1])
-		{
-			if (!ft_strncmp("-", p->command[1], ft_strlen(p->command[1])))
-			{
-				if (chdir(ft_get_env_value(s, "OLDPWD")) == -1)
-					write(2, "minishell: cd: OLDPWD not set HOMEMADE\n", 3);
-				else
-					ft_pwd();
-			}
-			else
-				chdir(p->command[1]);
-		}
+			ft_cd_path_home(s, p, home_value);
 		else if (home_value)
 			chdir(home_value);
 		new_pwd = getcwd(buff, 4096 + 1);
 		ft_change_pwd(s, ft_strdup(new_pwd));
 		free(buff);
 	}
-	else
-		write(2, "minishell: cd: HOME not set\n", 28);
 	/*t_envp	*temp = s->envp;
 	while (temp)
 	{
@@ -205,10 +129,10 @@ int	ft_cd(t_struct *s, t_parsed *p)
 	return (0);
 }
 
-int	ft_pwd(void)
+int ft_pwd(void)
 {
-	char	*current_path;
-	char	buff[4096 + 1];
+	char *current_path;
+	char buff[4096 + 1];
 
 	/*buff = malloc(sizeof(char) * (4096 + 1));
 	if (!buff)

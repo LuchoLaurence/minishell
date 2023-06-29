@@ -64,7 +64,6 @@ static void	ft_change_envp_node(t_struct *s, char *last_argument)
 		if (!ft_strncmp("_", temp->value[0], ft_strlen(temp->value[0])))
 		{
 			free(temp->value[1]);
-			//temp->value[1] = ft_strdup(last_argument);
 			temp->value[1] = ft_get_path_bin_or_last_argument(s, last_argument);
 			break ;
 		}
@@ -84,6 +83,8 @@ void	ft_change_underscore(t_struct *s, t_parsed *parsed)
 
 	if (!s || !parsed)
 		return ;
+	if (parsed->next)
+		return (ft_node_remove_underscore(s));
 	last = parsed;
 	last_argument = NULL;
 	i = 0;

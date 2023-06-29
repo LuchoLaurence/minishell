@@ -5,18 +5,18 @@
 static void	ft_child_process_hd(t_redirec *re)
 {
 	char	*line;
-	char	*stock;
+	//char	*stock;
 
 	if (!re)
 		return ;
 	close(re->here_d_pipe_fd[0]);
-	stock = re->filename;
-	re->filename = ft_strjoin(stock, "\n");
-	free(stock);
+	//stock = re->filename;
+	//re->filename = ft_strjoin(stock, "\n");
+	//free(stock);
 	while (1)
 	{
 		line = readline("> ");
-		if (line == NULL || !(ft_strncmp(re->filename, line, ft_strlen(line))))
+		if (line == NULL || !(ft_strncmp(re->filename, line, 1)))
 		{
 			ft_free_ptr((void *)line);
 			break;

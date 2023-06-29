@@ -121,6 +121,7 @@ void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
 void	ft_reassign_updated_envp_char(t_struct *s);
 void	ft_env_changing_builtin(t_struct *s, t_parsed *parsed);
 void	ft_change_underscore(t_struct *s, t_parsed *parsed);
+void	ft_node_remove_underscore(t_struct *s);
 
 /*	Exec */
 
