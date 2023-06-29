@@ -7,14 +7,14 @@ void	ft_unset_oldpwd_pwd_init(t_struct *s, char *arg_name)
 	if (!s || !arg_name)
 		return ;
 	pwd = NULL;
-	if (!ft_strncmp("OLDPWD", arg_name, ft_strlen(arg_name)))
+	if (!ft_strncmp("OLDPWD", arg_name))
 	{
 		s->unset_oldpwd = 1;
 		pwd = ft_get_env_value(s, "PWD");
 		if (!pwd)
 			s->old_pwd_memory = s->pwd_memory;
 	}
-	else if (!ft_strncmp("PWD", arg_name, ft_strlen(arg_name)))
+	else if (!ft_strncmp("PWD", arg_name))
 		s->unset_pwd = 1;
 }
 
@@ -29,14 +29,12 @@ int	ft_unset(t_struct *s, t_parsed *parsed)
 	i = 1;
 	while (temp && parsed->command[i])
 	{
-		if (!ft_strncmp(temp->value[0], parsed->command[i],
-			ft_strlen(parsed->command[i])))
+		if (!ft_strncmp(temp->value[0], parsed->command[i]))
 		{
 			ft_unset_oldpwd_pwd_init(s, parsed->command[i]);
 			ft_node_remove_envp(s, temp);
 			i++;
-			/*if (!ft_strncmp("OLDPWD", parsed->command[i],
-				ft_strlen(parsed->command[i])))
+			/*if (!ft_strncmp("OLDPWD", parsed->command[i]))
 			{
 				s->unset_oldpwd = 1;
 				s->old_pwd_memory =  

@@ -31,9 +31,9 @@ int	ft_echo(t_struct *s, t_parsed *parsed)
 			write(STDOUT_FILENO, "-", 1);
 		i++;
 	}*/
-	if (parsed->command[1] && parsed->command[1][0] == '-' && ft_strlen(parsed->command[1]) == 1)
-		write(STDOUT_FILENO, "-", 1);
-	if (parsed->command[1] && !ft_strncmp(parsed->command[1], "-n", 3))
+	//if (parsed->command[1] && parsed->command[1][0] == '-' && ft_strlen(parsed->command[1]) == 1)
+	//	write(STDOUT_FILENO, "-", 1);
+	if (parsed->command[1] && !ft_strncmp(parsed->command[1], "-n"))
 		i++;
 	while (parsed->command[i])
 	{
@@ -43,11 +43,8 @@ int	ft_echo(t_struct *s, t_parsed *parsed)
 			write(STDOUT_FILENO, " ", 1);
 		i++;
 	}
-	if (ft_strncmp(parsed->command[1], "-n", 3))
-	{
-		write(2, "ok\n", 3);
+	if (ft_strncmp(parsed->command[1], "-n"))
 		write(STDOUT_FILENO, "\n", 1);
-	}
 	return (0);
 }
 
@@ -60,7 +57,7 @@ void	ft_replace_value_envp(t_struct *s, char **name_value)
 	temp = s->envp;
 	while (temp)
 	{
-		if (!ft_strncmp(name_value[0], temp->value[0], ft_strlen(name_value[0])))
+		if (!ft_strncmp(name_value[0], temp->value[0]))
 			break ;
 		temp = temp->next;
 	}
@@ -85,6 +82,11 @@ int	ft_export(t_struct *s, t_parsed *parsed)
 	{
 		while (parsed->command[i])
 		{
+			ft_check_if_is_digit, if '=' alone, if '-' alone or no = before -, if = followed, all is taken
+			donc ft_split with = is not good
+
+
+
 			name_value = ft_split(parsed->command[i], '=');
 			result = ft_get_env_value(s, name_value[0]);
 			if (result)

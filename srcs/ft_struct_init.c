@@ -13,7 +13,7 @@
 	t = s->envp;
 	while (t)
 	{
-		if (!ft_strncmp(t->value[0], env_name, ft_strlen(t->value[0])))
+		if (!ft_strncmp(t->value[0], env_name))
 		{
 			env_value = t->value[1];
 			break ;
@@ -34,7 +34,7 @@ char	**ft_get_path_envp_tab(t_envp *envp)
 		return (NULL);
 	temp_envp = envp;
 	path_tab = NULL;
-	while (temp_envp && ft_strncmp(temp_envp->value[0], "PATH", 4))
+	while (temp_envp && ft_strncmp(temp_envp->value[0], "PATH"))
 		temp_envp = temp_envp->next;
 	if (temp_envp && temp_envp->value && temp_envp->value[1])
 		path_tab = ft_split_add_slash(temp_envp->value[1]);
@@ -86,18 +86,14 @@ static void	ft_struct_envp(t_struct *s, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp("OLDPWD=", envp[i], 7))
+		if (ft_strncmp("OLDPWD=", envp[i]))
 			ft_node_add_back_envp(s, ft_split(envp[i], '='));
-		if (!ft_strncmp("SHLVL=", envp[i], 6))
+		if (!ft_strncmp("SHLVL=", envp[i]))
 		{
 			temp = ft_atoi(ft_get_env_value(s, "SHLVL"));
-			printf("temp = %d\n", temp);
 			temp += 1;
-			printf("temp = %d\n", temp);
 			free(s->last_envp->value[1]);
 			s->last_envp->value[1] = ft_strdup(ft_itoa(temp));
-			printf("s->last_envp->value[0] = %s\n", s->last_envp->value[0]);
-			printf("s->last_envp->value[1] = %s\n", s->last_envp->value[1]);
 		}
 		i++;
 	}
@@ -115,6 +111,7 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->path_tab = ft_get_path_envp_tab(s->envp);
 	s->fd_in_saved = dup(STDIN_FILENO);
 	s->fd_out_saved = dup(STDOUT_FILENO);
+	s->fd_err_saved = dup(STDERR_FILENO);
 	s->pipe_fd = malloc(sizeof(int) * 2);
 	if (!(s->pipe_fd))
 		return (ft_error(s, MALLOC, "malloc"));

@@ -13,7 +13,7 @@ char	*ft_get_env_value(t_struct *s, char *env_name)
 	t = s->envp;
 	while (t)
 	{
-		if (!ft_strncmp(t->value[0], env_name, ft_strlen(t->value[0])))
+		if (!ft_strncmp(t->value[0], env_name))
 		{
 			env_value = t->value[1];
 			break ;

@@ -5,13 +5,13 @@
 static void	ft_functions_error(int error)
 {
     if (error == SYNTAX)
-        write(2, "syntax error\n", 13);
+        write(STDERR_FILENO, "syntax error\n", 13);
 	else if (error == PIPE)
-		write(2, "pipe failed\n", 12);
+		write(STDERR_FILENO, "pipe failed\n", 12);
 	else if (error == FORK)
-		write(2, "fork failed\n", 12);
+		write(STDERR_FILENO, "fork failed\n", 12);
 	else if (error == MALLOC)
-		write(2, "malloc failed\n", 14);
+		write(STDERR_FILENO, "malloc failed\n", 14);
 }
 
 /*  ft_error sends the right error message to the stderror (2) */
@@ -30,7 +30,8 @@ void    ft_error(t_struct *s, int error, char *name)
 			str = ft_strjoin(name, ": No such file or directory\n");
 		else
 			str = ft_strjoin(name, ": command not found\n");
-		write(2, str, ft_strlen(str));
+		write(STDERR_FILENO, "minishell: ", 11);
+		write(STDERR_FILENO, str, ft_strlen(str));
 		ft_free_ptr((void *) str);
 	}
     else if (error == FIILE)
@@ -39,7 +40,8 @@ void    ft_error(t_struct *s, int error, char *name)
 			str = ft_strjoin(name, ": Permission denied\n");
 		else if (errno == ENOENT)
 			str = ft_strjoin(name, ": No such file or directory\n");
-		write(2, str, ft_strlen(str));
+		write(STDERR_FILENO, "minishell: ", 11);
+		write(STDERR_FILENO, str, ft_strlen(str));
 		ft_free_ptr((void *) str);
 	}
 }

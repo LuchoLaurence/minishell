@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup_pf.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avan <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: avan <avan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:46:43 by avan              #+#    #+#             */
-/*   Updated: 2022/12/07 11:14:00 by avan             ###   ########.fr       */
+/*   Updated: 2023/06/29 18:12:12 by avan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_countchar(const char *s, t_elem *e)
 	{
 		if (e->tabint[1] == 0)
 			count = 0;
-		else if (ft_strncmp(s, "", 1))
+		else if (ft_strncmp(s, ""))
 			count = e->tabint[1];
 	}
 	else

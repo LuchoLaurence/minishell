@@ -14,7 +14,7 @@
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || !ft_strncmp("exit\n", line, ft_strlen(line)))
+		if (line == NULL || !ft_strncmp("exit\n", line))
 		{
 			write(1, "exit\n", 5);
 			exit(0);
@@ -157,13 +157,10 @@ int	main(int argc, char **argv, char **envp)
 		return (ft_error(s, MALLOC, "malloc"), 1);
 	ft_struct_init(s, envp);
 	s->envp_char = ft_envp_list_to_tab_string(s->envp);
-	//ft_check_std(s);
-	printf("s->fd_in_saved = %d\n", s->fd_in_saved);
-	printf("s->fd_out_saved = %d\n", s->fd_out_saved);
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (line == NULL || !ft_strncmp("exit\n", line, ft_strlen(line)))
+		if (line == NULL || !ft_strncmp("exit\n", line))
 		{
 			write(1, "exit\n", 5);
 			exit(0);

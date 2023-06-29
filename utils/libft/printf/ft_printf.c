@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avan <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: avan <avan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 12:28:38 by avan              #+#    #+#             */
-/*   Updated: 2022/12/07 11:13:24 by avan             ###   ########.fr       */
+/*   Updated: 2023/06/29 18:11:59 by avan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	ft_putstrest(t_elem *e, int *nb, int l)
 
 	l = ft_strlen(e->s);
 	temp = e->tabint[0];
-	if ((e->flags & FLAG_POINT) && !(ft_strncmp(e->s, "0", l)) && e->spe != 's')
+	if ((e->flags & FLAG_POINT) && !(ft_strncmp(e->s, "0")) && e->spe != 's')
 		ft_putelses(e, nb, l, temp);
 	else if (!(e->flags & FLAG_MOINS))
 	{

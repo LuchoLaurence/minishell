@@ -16,7 +16,7 @@ static void	ft_child_process_hd(t_redirec *re)
 	while (1)
 	{
 		line = readline("> ");
-		if (line == NULL || !(ft_strncmp(re->filename, line, 1)))
+		if (line == NULL || !(ft_strncmp(re->filename, line)))
 		{
 			ft_free_ptr((void *)line);
 			break;

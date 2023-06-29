@@ -11,8 +11,7 @@ void	ft_node_remove_underscore(t_struct *s)
 	under_node = s->envp;
 	while (under_node)
 	{
-		if (!ft_strncmp("_", under_node->value[0],
-			ft_strlen(under_node->value[0])))
+		if (!ft_strncmp("_", under_node->value[0]))
 			break ;
 		under_node = under_node->next;
 	}

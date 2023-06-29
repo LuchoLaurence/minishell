@@ -27,7 +27,7 @@ char	**ft_sort_tab(t_struct *s, char **tab_envp/*, int nb_nodes*/)
 		j = i + 1;
 		while (tab_envp[j])
 		{
-			result = ft_strncmp(tab_envp[i], tab_envp[j], 20000000);
+			result = ft_strncmp(tab_envp[i], tab_envp[j]);
 			if (result > 0)
 				ft_swap_ptr(tab_envp, i, j);
 			j++;
@@ -112,7 +112,7 @@ void	ft_print_envp_ascii_order(t_struct *s)
 	temp = s->envp;
 	while (temp)
 	{
-		if (!ft_strncmp(name_value[0], temp->value[0], ft_strlen(name_value[0])))
+		if (!ft_strncmp(name_value[0], temp->value[0]))
 			break ;
 		temp = temp->next;
 	}

@@ -94,6 +94,7 @@ typedef struct s_struct
 	int			previous_fd;
 	int			fd_in_saved;
 	int			fd_out_saved;
+	int			fd_err_saved;
 	int			i;
 	int			j;
 	int			error;
@@ -107,7 +108,7 @@ int		ft_env(t_struct *s);
 int		ft_exit(t_struct *s, t_parsed * parsed);
 int		ft_export(t_struct *s, t_parsed *parsed);
 void	ft_print_envp_ascii_order(t_struct *s);
-int		ft_pwd(void);
+int		ft_pwd(t_parsed *parsed);
 int		ft_unset(t_struct *s, t_parsed *parsed);
 
 /*  Errors */
