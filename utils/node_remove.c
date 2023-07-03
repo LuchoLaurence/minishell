@@ -33,6 +33,28 @@ void	ft_node_remove_underscore(t_struct *s)
 	ft_reassign_updated_envp_char(s);
 }
 
+/*void	ft_node_remove_envp_export(t_struct *s, t_envp *node)
+{
+	t_envp	*temp;
+	t_envp	*next_node;
+
+	if (!s || !node)
+		return ;
+	temp = node->prev;
+	next_node = node->next;
+	if (!temp)
+		s->envp_export = next_node;
+	else if (temp)
+		temp->next = next_node;
+	if (next_node)
+		next_node->prev = temp;
+	//if (s->last_envp == node)
+	//	s->last_envp = temp;
+	ft_free_tab((void **) node->value);
+	ft_free_ptr((void *) node);
+	node = NULL;
+}*/
+
 void	ft_node_remove_envp(t_struct *s, t_envp *node)
 {
 	t_envp	*temp;
@@ -50,7 +72,7 @@ void	ft_node_remove_envp(t_struct *s, t_envp *node)
 		next_node->prev = temp;
 	if (s->last_envp == node)
 		s->last_envp = temp;
-	//ft_free_tab((void **) node->value);
+	ft_free_tab((void **) node->value);
 	ft_free_ptr((void *) node);
 	node = NULL;
 }

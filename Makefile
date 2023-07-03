@@ -8,6 +8,7 @@ NAME = minishell
 UTL_DIR =	utils
 UTL_FILES =	\
 			ft_split_add_slash.c \
+			ft_split_envp.c \
 			minisplit.c \
 			node_add_back.c \
 			node_remove.c
@@ -16,15 +17,18 @@ UTL =	$(addprefix $(UTL_DIR)/, $(UTL_FILES))
 SRC_DIR =	./srcs
 SRC_FILES =	\
 			builtin.c \
-			builtin2.c \
-			builtin3.c \
-			builtin4.c \
 			change_env.c \
 			close_all_previous_files.c \
+			echo.c \
+			env.c \
 			error.c \
 			exec.c \
 			exec2.c \
+			exit.c \
 			expander.c \
+			export.c \
+			export2.c \
+			export3.c \
 			free.c \
 			free2.c \
 			find_built_in.c \
@@ -35,6 +39,7 @@ SRC_FILES =	\
 			main.c \
 			open_files_get_fds.c \
 			open_here_doc.c \
+			unset.c \
 			wait_all_processes.c
 SRC =	$(UTL) $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

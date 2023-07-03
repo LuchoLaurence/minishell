@@ -43,9 +43,9 @@ void	ft_node_add_back_parsed(t_struct *s, char **command)
 	}
 }
 
-/*	void ft_node_add_back_parsed creates a envp node and adds it at
-	the back of the envp linked list */
-void	ft_node_add_back_envp(t_struct *s, char **value)
+/*	void ft_node_add_back_envp_export creates a envp node and adds it at
+	the back of the envp_export linked list */
+/*void	ft_node_add_back_envp_export(t_struct *s, char **value, int i)
 {
 	t_envp	*last;
 	t_envp	*temp;
@@ -56,6 +56,35 @@ void	ft_node_add_back_envp(t_struct *s, char **value)
 	if (!last)
 		return ;
 	last->value = value;
+	last->nb_words = i;
+	last->next = NULL;
+	last->prev = NULL;
+	if (!s->envp_export)
+		s->envp_export = last;
+	else
+	{
+		temp = s->envp_export;
+		while (temp->next)
+			temp = temp->next;
+		last->prev = temp;
+		temp->next = last;
+	}
+}*/
+
+/*	void ft_node_add_back_envp creates a envp node and adds it at
+	the back of the envp linked list */
+void	ft_node_add_back_envp(t_struct *s, char **value, int i)
+{
+	t_envp	*last;
+	t_envp	*temp;
+
+	if (!s || !value || (value && *value && !(**value)))
+		return ;
+	last = malloc(sizeof(t_envp));
+	if (!last)
+		return ;
+	last->value = value;
+	last->nb_words = i;
 	last->next = NULL;
 	last->prev = NULL;
 	s->last_envp = last;

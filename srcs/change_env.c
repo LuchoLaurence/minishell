@@ -46,7 +46,7 @@ static void	ft_create_underscore_node(t_struct *s, char *last_argument)
 		value[1] = ft_strdup(last_argument);*/
 	value[1] = ft_get_path_bin_or_last_argument(s, last_argument);
 	value[2] = NULL;
-	ft_node_add_back_envp(s, value);
+	ft_node_add_back_envp(s, value, 2);
 }
 
 /*	void ft_change_envp_node changes the node "_" or creates it if

@@ -18,7 +18,10 @@ void	ft_check_old_pwd(t_struct *s, char *old_pwd)
 			if (s->unset_pwd > 1)
 				temp->value[1] = ft_strdup(s->old_pwd_memory);
 			else
+			{
 				temp->value[1] = old_pwd;
+				temp->nb_words = 2;
+			}
 			if (!old_pwd && s->unset_pwd == 1)
 				s->unset_pwd += 1;
 			return;
@@ -31,7 +34,7 @@ void	ft_check_old_pwd(t_struct *s, char *old_pwd)
 	value[0] = ft_strdup("OLDPWD");
 	value[1] = old_pwd;
 	value[2] = NULL;
-	ft_node_add_back_envp(s, value);
+	ft_node_add_back_envp(s, value, 2);
 }
 
 void ft_change_pwd(t_struct *s, char *new_pwd)
@@ -84,14 +87,48 @@ static int	ft_pwd_write(void)
 	return (0);
 }
 
+void	ft_error_cd(char *arg, int error)
+{
+	char	*str;
+	char	*stock;
+	char	str2[3];
+
+	if (!arg)
+		return ;
+	str = NULL;
+	stock = NULL;
+	if (error == INVALID_OPTION)
+	{
+		ft_strlcpy(str2, arg, 3);
+		stock = ft_strjoin("minishell: cd: ", str2);
+		str = ft_strjoin(stock, ": invalid option\n");
+		ft_free_ptr((void *) stock);
+		write(STDERR_FILENO, str, ft_strlen(str));
+		ft_free_ptr((void *) str);
+	}
+	else
+	{
+		stock = ft_strjoin("minishell: cd: ", arg);
+		str = ft_strjoin(stock, ": No such file or directory\n");
+		ft_free_ptr((void *) stock);
+		write(STDERR_FILENO, str, ft_strlen(str));
+		ft_free_ptr((void *) str);
+	}
+}
+
 void	ft_cd_path_home(t_struct *s, t_parsed *p, char *home_value)
 {
 	if (!s || !p)
 		return ;
 	if (p->command[1][0] == '-')
 	{
-		if (p->command[1][1])
-			write(STDERR_FILENO, "minishell: cd: invalid option\n", 30);
+		if (p->command[1][1] && p->command[1][1] == '-' && !(p->command[1][2]))
+		{
+			if (chdir(home_value) == -1)
+				write(STDERR_FILENO, "minishell: cd: HOME not set\n", 28);
+		}
+		else if (p->command[1][1])
+			ft_error_cd(p->command[1], INVALID_OPTION);
 		else
 		{
 			if (chdir(ft_get_env_value(s, "OLDPWD")) == -1)

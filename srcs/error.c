@@ -14,6 +14,62 @@ static void	ft_functions_error(int error)
 		write(STDERR_FILENO, "malloc failed\n", 14);
 }
 
+void	ft_builtin_error(int error, char *name)
+{
+	char	*str;
+	char	*stock;
+
+	if (!name)
+		return ;
+	str = NULL;
+	stock = NULL;
+	if (error == EXPORT)
+	{
+		stock = ft_strjoin("minishell: export: \'", name);
+		str = ft_strjoin(stock, "\': not a valid identifier\n");
+		ft_free_ptr((void *) stock);
+		write(STDERR_FILENO, str, ft_strlen(str));
+		ft_free_ptr((void *) str);
+	}
+	else if (error == UNSET)
+	{
+		stock = ft_strjoin("minishell: unset: \'", name);
+		str = ft_strjoin(stock, "\': not a valid identifier\n");
+		ft_free_ptr((void *) stock);
+		write(STDERR_FILENO, str, ft_strlen(str));
+		ft_free_ptr((void *) str);
+	}
+}
+
+void	ft_exec_error(t_struct *s, int error, char *name, char *str)
+{
+	char	*stock;
+
+	if (!s || !name)
+		return ;
+	stock = NULL;
+	if (error == EXECVE)
+	{
+		stock = ft_strjoin("minishell: ", name);
+		if (ft_strnstr(name, "/", ft_strlen(name)) || !(s->path_tab))
+			str = ft_strjoin(stock, ": No such file or directory\n");
+		else
+			str = ft_strjoin(stock, ": command not found\n");
+		write(STDERR_FILENO, str, ft_strlen(str));
+	}
+	else if (error == FIILE)
+	{
+		stock = ft_strjoin("minishell: ", name);
+		if (errno == EACCES)
+			str = ft_strjoin(stock, ": Permission denied\n");
+		else if (errno == ENOENT)
+			str = ft_strjoin(stock, ": No such file or directory\n");
+		write(STDERR_FILENO, str, ft_strlen(str));
+	}
+	ft_free_ptr((void *) stock);
+	ft_free_ptr((void *) str);
+}
+
 /*  ft_error sends the right error message to the stderror (2) */
 void    ft_error(t_struct *s, int error, char *name)
 {
@@ -24,24 +80,8 @@ void    ft_error(t_struct *s, int error, char *name)
 	str = NULL;
 	if (error == SYNTAX || error == PIPE || error == FORK || error == MALLOC)
 		ft_functions_error(error);
-	else if (error == EXECVE)
-	{
-		if (ft_strnstr(name, "/", ft_strlen(name)) || !(s->path_tab))
-			str = ft_strjoin(name, ": No such file or directory\n");
-		else
-			str = ft_strjoin(name, ": command not found\n");
-		write(STDERR_FILENO, "minishell: ", 11);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
-	}
-    else if (error == FIILE)
-	{
-		if (errno == EACCES)
-			str = ft_strjoin(name, ": Permission denied\n");
-		else if (errno == ENOENT)
-			str = ft_strjoin(name, ": No such file or directory\n");
-		write(STDERR_FILENO, "minishell: ", 11);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
-	}
+	else if (error == EXECVE || error == FIILE)
+		ft_exec_error(s, error, name, NULL);
+	else if (error == EXPORT || error == UNSET)
+		ft_builtin_error(error, name);
 }

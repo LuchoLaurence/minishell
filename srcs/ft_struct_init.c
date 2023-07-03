@@ -62,33 +62,77 @@ void	ft_create_environment(t_struct *s)
 	value[1] = ft_strdup(current_path);
 	value[2] = NULL;
 	free(current_path);
-	ft_node_add_back_envp(s, value);
+	ft_node_add_back_envp(s, value, 2);
+	value = malloc(sizeof(char *) * (2 + 1));
+	if (!value)
+		return ;
+	value[0] = ft_strdup("OLDPWD");
+	value[1] = NULL;
+	value[2] = NULL;
+	ft_node_add_back_envp(s, value, 1);
 	value2 = malloc(sizeof(char *) * (2 + 1));
 	if (!value2)
 		return ;
 	value2[0] = ft_strdup("SHLVL");
 	value2[1] = ft_strdup("1");
 	value2[2] = NULL;
-	ft_node_add_back_envp(s, value2);
+	ft_node_add_back_envp(s, value2, 2);
 }
+
+/*static void	ft_copy_envp_to_export(t_struct *s)
+{
+	t_envp	*temp;
+	char	**oldpwd;
+	int		oldpwd_exists;
+
+	if (!s)
+		return ;
+	temp = s->envp;
+	oldpwd_exists = 0;
+	oldpwd = NULL;
+	while (temp)
+	{
+		if (!ft_strncmp(temp->value[0], "OLDPWD"))
+			oldpwd_exists = 1;
+		ft_node_add_back_envp_export(s, temp->value, 2);
+		temp = temp->next;
+	}
+	if (!oldpwd_exists)
+	{
+		oldpwd = malloc(sizeof(char *) * 2);
+		if (!oldpwd)
+			return ;
+		oldpwd[0] = ft_strdup("OLDPWD");
+		oldpwd[1] = NULL;
+		ft_node_add_back_envp_export(s, oldpwd, 1);
+	}
+}*/
 
 /*	static void ft_struct_envp gets the envp and splits the lines into
 	two char *str, each envp node gets its char **value */
 static void	ft_struct_envp(t_struct *s, char **envp)
 {
+	char	**oldpwd;
 	int		i;
+	int		j;
 	int		temp;
+	int		oldpwd_exists;
 
 	if (!s || !envp)
 		return ;
 	if (!(*envp))
 		return (ft_create_environment(s));
 	i = 0;
+	j = 0;
+	oldpwd_exists = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp("OLDPWD=", envp[i]))
-			ft_node_add_back_envp(s, ft_split(envp[i], '='));
-		if (!ft_strncmp("SHLVL=", envp[i]))
+		if (!ft_strncmp_length("OLDPWD=", envp[i], 7))
+			oldpwd_exists = 1;
+		//if (ft_strncmp("OLDPWD=", envp[i]))
+		if (envp[i])
+			ft_node_add_back_envp(s, ft_split_envp(envp[i], &j), 2);
+		if (!ft_strncmp_length("SHLVL=", envp[i], 6))
 		{
 			temp = ft_atoi(ft_get_env_value(s, "SHLVL"));
 			temp += 1;
@@ -96,6 +140,15 @@ static void	ft_struct_envp(t_struct *s, char **envp)
 			s->last_envp->value[1] = ft_strdup(ft_itoa(temp));
 		}
 		i++;
+	}
+	if (!oldpwd_exists)
+	{
+		oldpwd = malloc(sizeof(char *) * 2);
+		if (!oldpwd)
+			return ;
+		oldpwd[0] = ft_strdup("OLDPWD");
+		oldpwd[1] = NULL;
+		ft_node_add_back_envp(s, oldpwd, 1);
 	}
 }
 
@@ -108,6 +161,7 @@ void	ft_struct_init(t_struct *s, char **envp)
 	s->token = NULL;
 	s->parsed = NULL;
 	ft_struct_envp(s, envp);
+	//ft_copy_envp_to_export(s);
 	s->path_tab = ft_get_path_envp_tab(s->envp);
 	s->fd_in_saved = dup(STDIN_FILENO);
 	s->fd_out_saved = dup(STDOUT_FILENO);

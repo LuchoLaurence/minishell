@@ -35,17 +35,33 @@ char	*ft_check_access(char **path_tab, char *cmd_name)
 	it tries all the relative paths */
 void	ft_execution(t_struct *s, t_parsed *parsed)
 {
+	int	built_in_child;
+
 	if (!s || !parsed)
 		return ;
-	if (ft_find_built_in(s, parsed))
+	built_in_child = ft_find_built_in(s, parsed);
+	if (built_in_child)
 	{
-		execve(parsed->command[0], parsed->command, s->envp_char);
-		parsed->path = ft_check_access(s->path_tab, parsed->command[0]);
-		if (execve(parsed->path, parsed->command, s->envp_char) < 0)
+		if (built_in_child == 2)
 		{
-			ft_error(s, EXECVE, parsed->command[0]);
-			//ft_free_everything(s);
-			exit(0);
+			execve(parsed->command[1], parsed->command, s->envp_char);
+			parsed->path = ft_check_access(s->path_tab, parsed->command[1]);
+			if (execve(parsed->path, &(parsed->command[1]), s->envp_char))
+			{
+				ft_error(s, EXECVE, parsed->command[1]);
+				exit(0);
+			}
+		}
+		else
+		{
+			execve(parsed->command[0], parsed->command, s->envp_char);
+			parsed->path = ft_check_access(s->path_tab, parsed->command[0]);
+			if (execve(parsed->path, parsed->command, s->envp_char) < 0)
+			{
+				ft_error(s, EXECVE, parsed->command[0]);
+				//ft_free_everything(s);
+				exit(0);
+			}
 		}
 	}
 	exit(0);

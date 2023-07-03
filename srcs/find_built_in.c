@@ -8,10 +8,12 @@ int	ft_find_built_in(t_struct *s, t_parsed *parsed)
 		return (1);
 	if (parsed->command)
 		cmd = parsed->command[0];
-	if (!ft_strncmp(cmd, "env") && !(parsed->next) && !(parsed->prev))
+	if (!ft_strncmp(cmd, "env")/* && !(parsed->next) && !(parsed->prev)*/)
 	{
-		printf("entree\n");
-		return (ft_env(s));
+		if (!(parsed->next) && !parsed->prev && !(parsed->command[1]))
+			return (ft_env(s));
+		else
+			return (2);
 	}
 	else if (!ft_strncmp(cmd, "pwd"))
 		return (ft_pwd(parsed));
@@ -24,7 +26,11 @@ int	ft_find_built_in(t_struct *s, t_parsed *parsed)
 		if (parsed->command[1])
 			return (0);
 		else
+		{
+		printf("ENFANT\n");
+
 			return (ft_export(s, parsed));
+		}
 	}
 	else if (!ft_strncmp(cmd, "cd"))
 		return (0);
@@ -56,5 +62,8 @@ void	ft_env_changing_builtin(t_struct *s, t_parsed *parsed)
 		ft_unset(s, parsed);
 	else if (parsed->command && parsed->command[1]
 		&& !ft_strncmp(cmd, "export"))
+	{
+		printf("PARENT\n");
 		ft_export(s, parsed);
+	}
 }
