@@ -49,8 +49,12 @@ t_tab_envp	**ft_fill_tab(t_struct *s, t_tab_envp **tab_envp, int nb_nodes)
 	temp = s->envp;
 	while (temp && i < nb_nodes)
 	{
-		tab_envp[i]->name = ft_strdup(temp->value[0]);
-		tab_envp[i++]->nb_words = temp->nb_words;
+		if (ft_strncmp("?", temp->value[0]) && ft_strncmp("_",
+			temp->value[0]))
+		{
+			tab_envp[i]->name = ft_strdup(temp->value[0]);
+			tab_envp[i++]->nb_words = temp->nb_words;
+		}
 		temp = temp->next;
 	}
 	return (tab_envp);
@@ -69,7 +73,9 @@ t_tab_envp	**ft_tab_envp(t_struct *s)
 	nb_nodes = 0;
 	while (temp)
 	{
-		nb_nodes++;
+		if (ft_strncmp("?", temp->value[0]) && ft_strncmp("_",
+			temp->value[0]))
+			nb_nodes++;
 		temp = temp->next;
 	}
 	tab_envp = malloc(sizeof(t_tab_envp *) * (nb_nodes + 1));
@@ -102,19 +108,16 @@ void	ft_print_envp_ascii_order(t_struct *s)
 	temp = NULL;
 	while (tab_envp[i])
 	{
-		if (ft_strncmp("_", tab_envp[i]->name))
+		write(STDOUT_FILENO, "declare -x ", 11);
+		write(STDOUT_FILENO, tab_envp[i]->name, ft_strlen(tab_envp[i]->name));
+		if (tab_envp[i]->nb_words == 2)
 		{
-			write(STDOUT_FILENO, "declare -x ", 11);
-			write(STDOUT_FILENO, tab_envp[i]->name, ft_strlen(tab_envp[i]->name));
-			if (tab_envp[i]->nb_words == 2)
-			{
-				write(STDOUT_FILENO, "=\"", 2);
-				temp = ft_get_env_value(s, tab_envp[i]->name);
-				write(STDOUT_FILENO, temp, ft_strlen(temp));
-				write(STDOUT_FILENO, "\"", 1);
-			}
-			write(STDOUT_FILENO, "\n", 1);
+			write(STDOUT_FILENO, "=\"", 2);
+			temp = ft_get_env_value(s, tab_envp[i]->name);
+			write(STDOUT_FILENO, temp, ft_strlen(temp));
+			write(STDOUT_FILENO, "\"", 1);
 		}
+		write(STDOUT_FILENO, "\n", 1);
 		i++;
 	}
 	i = 0;

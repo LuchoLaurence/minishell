@@ -14,34 +14,9 @@ static void	ft_functions_error(int error)
 		write(STDERR_FILENO, "malloc failed\n", 14);
 }
 
-void	ft_builtin_error(int error, char *name)
-{
-	char	*str;
-	char	*stock;
-
-	if (!name)
-		return ;
-	str = NULL;
-	stock = NULL;
-	if (error == EXPORT)
-	{
-		stock = ft_strjoin("minishell: export: \'", name);
-		str = ft_strjoin(stock, "\': not a valid identifier\n");
-		ft_free_ptr((void *) stock);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
-	}
-	else if (error == UNSET)
-	{
-		stock = ft_strjoin("minishell: unset: \'", name);
-		str = ft_strjoin(stock, "\': not a valid identifier\n");
-		ft_free_ptr((void *) stock);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
-	}
-}
-
-void	ft_exec_error(t_struct *s, int error, char *name, char *str)
+/*	static void ft_exec_error writes the error message dedicated to
+	the execve or the opening of a file */
+static void	ft_exec_error(t_struct *s, int error, char *name, char *str)
 {
 	char	*stock;
 
@@ -82,6 +57,4 @@ void    ft_error(t_struct *s, int error, char *name)
 		ft_functions_error(error);
 	else if (error == EXECVE || error == FIILE)
 		ft_exec_error(s, error, name, NULL);
-	else if (error == EXPORT || error == UNSET)
-		ft_builtin_error(error, name);
 }

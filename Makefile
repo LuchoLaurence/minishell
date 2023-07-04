@@ -18,6 +18,7 @@ SRC_DIR =	./srcs
 SRC_FILES =	\
 			builtin.c \
 			change_env.c \
+			change_return_code.c \
 			close_all_previous_files.c \
 			echo.c \
 			env.c \
@@ -32,13 +33,15 @@ SRC_FILES =	\
 			free.c \
 			free2.c \
 			find_built_in.c \
-			ft_struct_init.c \
 			envp_list_to_tab_string.c \
 			get_last_infile.c \
 			lexer.c \
 			main.c \
 			open_files_get_fds.c \
 			open_here_doc.c \
+			signals.c \
+			struct_init.c \
+			struct_init2.c \
 			unset.c \
 			wait_all_processes.c
 SRC =	$(UTL) $(addprefix $(SRC_DIR)/, $(SRC_FILES))

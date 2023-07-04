@@ -4,10 +4,8 @@
 	each node containing all the seperated environment variable name with
 	their value, except PATH that gets all of its paths terminated with '/'
 	and returns the accessible path for the command */
-//static char	*ft_check_access(t_envp *envp, char *cmd_name)
 char	*ft_check_access(char **path_tab, char *cmd_name)
 {
-	//char	*path_tab;
 	char	*stock;
 	char	*path_accessible;
 	int		i;
@@ -44,24 +42,17 @@ void	ft_execution(t_struct *s, t_parsed *parsed)
 	{
 		if (built_in_child == 2)
 		{
-			execve(parsed->command[1], parsed->command, s->envp_char);
+			execve(parsed->command[1], &(parsed->command[1]), s->envp_char);
 			parsed->path = ft_check_access(s->path_tab, parsed->command[1]);
 			if (execve(parsed->path, &(parsed->command[1]), s->envp_char))
-			{
 				ft_error(s, EXECVE, parsed->command[1]);
-				exit(0);
-			}
 		}
 		else
 		{
 			execve(parsed->command[0], parsed->command, s->envp_char);
 			parsed->path = ft_check_access(s->path_tab, parsed->command[0]);
 			if (execve(parsed->path, parsed->command, s->envp_char) < 0)
-			{
 				ft_error(s, EXECVE, parsed->command[0]);
-				//ft_free_everything(s);
-				exit(0);
-			}
 		}
 	}
 	exit(0);

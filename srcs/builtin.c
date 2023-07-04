@@ -124,7 +124,12 @@ void	ft_cd_path_home(t_struct *s, t_parsed *p, char *home_value)
 	{
 		if (p->command[1][1] && p->command[1][1] == '-' && !(p->command[1][2]))
 		{
-			if (chdir(home_value) == -1)
+			if (p->command[2])
+			{
+				if (chdir(p->command[2]) == -1)
+					ft_error_cd(p->command[2], INVALID_IDENTIFIER);
+			}
+			else if (chdir(home_value) == -1)
 				write(STDERR_FILENO, "minishell: cd: HOME not set\n", 28);
 		}
 		else if (p->command[1][1])
@@ -132,18 +137,18 @@ void	ft_cd_path_home(t_struct *s, t_parsed *p, char *home_value)
 		else
 		{
 			if (chdir(ft_get_env_value(s, "OLDPWD")) == -1)
-				write(STDERR_FILENO, "minishell: cd: OLDPWD not set HOMEMADE\n", 3);
+				write(STDERR_FILENO, "minishell: cd: OLDPWD not set\n", 30);
 			else
 				ft_pwd_write();
 		}
 	}
-	if (!ft_strncmp("~", p->command[1]))
+	else if (!ft_strncmp("~", p->command[1]))
 	{
 		if (chdir(home_value) == -1)
 			write(STDERR_FILENO, "minishell: cd: HOME not set\n", 28);
 	}
-	else
-		chdir(p->command[1]);
+	else if (chdir(p->command[1]) == -1)
+		ft_error_cd(p->command[1], INVALID_IDENTIFIER);
 }
 
 int ft_cd(t_struct *s, t_parsed *p)
@@ -169,8 +174,8 @@ int ft_cd(t_struct *s, t_parsed *p)
 			chdir(home_value);
 		new_pwd = getcwd(buff, 4096 + 1);
 		ft_change_pwd(s, ft_strdup(new_pwd));
-		free(buff);
 	}
+	free(buff);
 	/*t_envp	*temp = s->envp;
 	while (temp)
 	{

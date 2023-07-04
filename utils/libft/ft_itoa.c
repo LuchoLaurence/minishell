@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avan <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: avan <avan@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 14:42:48 by avan              #+#    #+#             */
-/*   Updated: 2022/11/17 13:01:20 by avan             ###   ########.fr       */
+/*   Updated: 2023/07/04 10:28:13 by avan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,3 @@ char	*ft_itoa(int n)
 		str[0] = '-';
 	return (str);
 }
-/*
-int main(void)
-{
-	int		n;
-	char	*str;
-
-	n = 214748364;
-	str = ft_itoa(n);
-	printf("%s\n", str);
-	free(str);
-	return (0);
-}*/

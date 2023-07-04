@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+static sig_atomic_t g_signal_detected = 0;
+
 /*int	main(int argc, char **argv, char **envp)
 {
 	t_struct	*s;
@@ -156,18 +158,26 @@ int	main(int argc, char **argv, char **envp)
 	if (!s)
 		return (ft_error(s, MALLOC, "malloc"), 1);
 	ft_struct_init(s, envp);
-	s->envp_char = ft_envp_list_to_tab_string(s->envp);
+	ft_signal_init(s);
 	while (1)
 	{
+		g_signal_detected = 0;
 		line = readline("minishell$ ");
+		printf("(1)line = %s ==== %d\n", line, g_signal_detected);
 		if (line == NULL || !ft_strncmp("exit\n", line))
 		{
 			write(1, "exit\n", 5);
 			exit(0);
 		}
+		if (g_signal_detected)
+		{
+			write(STDIN_FILENO, ft_itoa(g_signal_detected), 1);
+			continue ;
+		}
 		add_history(line);
 		ft_read_line(s, line);
 		ft_exec(s);
+		printf("node [?] = %s\n", ft_get_env_value(s, "?"));
 		ft_free_structs(s);
 		free(line);
 		line = NULL;

@@ -114,6 +114,7 @@ void ft_exec(t_struct *s)
 		ft_pipe_and_fork(s, parsed);
 		parsed = parsed->next;
 	}
+	ft_change_return_code(s);
 	dup2(s->fd_in_saved, STDIN_FILENO);
 	dup2(s->fd_out_saved, STDOUT_FILENO);
 	dup2(s->fd_err_saved, STDERR_FILENO);

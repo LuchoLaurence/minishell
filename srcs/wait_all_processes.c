@@ -38,6 +38,9 @@ void	ft_wait_all_processes(t_struct *s)
 	waitpid(temp_parsed->pid, &error_last_cmd, 0);
 //	printf("wait parent done\n");
 	s->error = temp_parsed->error;
+	printf("wait all processes : error_last_cmd = %d\n", error_last_cmd);
+	if (error_last_cmd == SEGFAULT)
+		s->error = 139;
 	if (error_last_cmd != 0 && s->error == 0)
 		s->error = 1;
 }
