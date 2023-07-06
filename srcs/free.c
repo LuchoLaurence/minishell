@@ -71,7 +71,7 @@ void ft_free_structs(t_struct *s)
 		ft_free_parsed(s);
 	s->i = 0;
 	s->j = 0;
-	s->error = 0;
+	//s->error = 0;
 	//ft_free_ptr((void *)s->pipe_fd);
 	//s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
 }

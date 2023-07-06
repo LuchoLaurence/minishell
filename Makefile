@@ -16,7 +16,8 @@ UTL =	$(addprefix $(UTL_DIR)/, $(UTL_FILES))
 
 SRC_DIR =	./srcs
 SRC_FILES =	\
-			builtin.c \
+			cd.c \
+			cd2.c \
 			change_env.c \
 			change_return_code.c \
 			close_all_previous_files.c \
@@ -39,10 +40,12 @@ SRC_FILES =	\
 			main.c \
 			open_files_get_fds.c \
 			open_here_doc.c \
+			pwd.c \
 			signals.c \
 			struct_init.c \
 			struct_init2.c \
 			unset.c \
+			unset2.c \
 			wait_all_processes.c
 SRC =	$(UTL) $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
@@ -57,7 +60,7 @@ $(OBJ_DIR)/$(UTL_DIR):
 
 $(NAME): $(OBJ) $(LIB_DIR)/$(LIB)
 	@echo "Compiling Executable"
-	$(CC) $(CFLAGS) $(LIB_DIR)/$(LIB) -g -o $(NAME) $(OBJ) -lreadline
+	$(CC) $(CFLAGS) $(LIB_DIR)/$(LIB) -g -o $(NAME) $(OBJ) -L /Users/avan/.brew/opt/readline/lib -lreadline -I /Users/avan/.brew/opt/readline/include/readline 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@

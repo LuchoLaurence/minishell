@@ -58,3 +58,17 @@ void    ft_error(t_struct *s, int error, char *name)
 	else if (error == EXECVE || error == FIILE)
 		ft_exec_error(s, error, name, NULL);
 }
+
+void	ft_error_env(t_struct *s, char *name)
+{
+	char	*stock;
+	char	*str;
+
+	if (!s)
+		return ;
+	stock = ft_strjoin("env: ", name);
+	str = ft_strjoin(stock, ": No such file or directory\n");
+	ft_free_ptr((void *) stock);
+	write(STDERR_FILENO, str, ft_strlen(str));
+	ft_free_ptr((void *) str);
+}

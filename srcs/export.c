@@ -1,96 +1,50 @@
 #include "minishell.h"
 
-void	ft_error_export(char *arg, int error)
+int	ft_check_first_arg(t_struct *s, t_parsed *parsed)
 {
 	char	*str;
-	char	*stock;
-	char	str2[3];
 
-	if (!arg)
-		return ;
-	str = NULL;
-	stock = NULL;
-	if (error == INVALID_OPTION)
+	if (!s || !parsed)
+		return (0);
+	str = parsed->command[1];
+	if (str[0] == '-')
 	{
-		ft_strlcpy(str2, arg, 3);
-		stock = ft_strjoin("minishell: export: ", str2);
-		str = ft_strjoin(stock, ": invalid option\n");
-		ft_free_ptr((void *) stock);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
+		if ((str[1] == '-' && !str[2]) || !str[1])
+		{
+			if (parsed->command[2])
+				return (1);
+			else if (!str[1])
+				return (1);
+			else
+				return (ft_print_envp_ascii_order(s), 0);
+		}
+		else
+			return (ft_error_export(s, str, INVALID_OPTION), 0); // s->error = 2
 	}
-	else
-	{
-		stock = ft_strjoin("minishell: export: `", arg);
-		str = ft_strjoin(stock, "\': not a valid identifier\n");
-		ft_free_ptr((void *) stock);
-		write(STDERR_FILENO, str, ft_strlen(str));
-		ft_free_ptr((void *) str);
-	}
+	return (1);
 }
 
-void	ft_replace_value_export(t_struct *s, char **name_value, int i)
-{
-	t_envp	*temp;
-	char	*stock;
-
-	if (!s || !name_value)
-		return ;
-	temp = s->envp;
-	while (s->envp->next)
-		s->envp = s->envp->next;
-	s->envp = temp;
-	stock = NULL;
-	while (temp)
-	{
-		if (!ft_strncmp(name_value[0], temp->value[0]))
-			break ;
-		temp = temp->next;
-	}
-	ft_free_ptr((void *) temp->value[1]);
-	temp->value[1] = ft_strdup(name_value[1]);
-	temp->nb_words = i;
-}
-
-static void	ft_change_envp_export(t_struct *s, char *str, char *result)
+int	ft_export(t_struct *s, t_parsed *parsed)
 {
 	char	**name_value;
 	int		i;
 
-	if (!s || !str)
-		return ;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			break ;
-		i++;
-	}
-	name_value = ft_split_envp(str, &i);
-	result = ft_env_exists(s->envp, name_value[0]);
-	if (result)
-		ft_replace_value_export(s, name_value, i);
+	if (!s || !parsed)
+		return (1);
+	i = 1;
+	name_value = NULL;
+	if (!(parsed->command[i]))
+		ft_print_envp_ascii_order(s);
 	else
-		ft_node_add_back_envp(s, name_value, i);
-}
-
-void	ft_check_args(t_struct *s, char *str)
-{
-	int	i;
-
-	if (!s || !str)
-		return ;
-	i = 0;
-	if (ft_isdigit(str[0]) || str[0] == '=' || (str[0] == '-' && !str[1]))
-		return (ft_error_export(str, INVALID_IDENTIFIER)); // s->error = 1
-	while (ft_isalnum(str[i]) || str[i] == '_')
 	{
-		i++;
-		if (str[i] == '=')
-			return (ft_change_envp_export(s, str, NULL));
+		if (!ft_check_first_arg(s, parsed))
+			return (0);
+		while (parsed->command[i])
+		{
+			ft_check_args(s, parsed, parsed->command[i]); // parsed
+			i++;
+		}
+		ft_reassign_updated_envp_char(s);
 	}
-	if (i < (int) ft_strlen(str))
-		ft_error_export(str, INVALID_IDENTIFIER);
-	else
-		ft_change_envp_export(s, str, NULL);
+	return (0);
 }

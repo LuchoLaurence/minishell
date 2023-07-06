@@ -22,14 +22,12 @@ void	ft_signal_init(t_struct *s)
 {
 	if (!s)
 		return ;
-	/*s->term_origin = s->termios;
+	//s->term_origin = s->termios;
 	tcgetattr(STDIN_FILENO, &(s->termios));
-	s->termios.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &(s->termios));*/
-	if (sigemptyset(&(s->sa.sa_mask)) == -1)
-		perror("failed to initialize sa_mask");
+	s->termios.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(s->termios));
 	s->sa.sa_handler = &ft_signal_handler;
-	s->sa.sa_flags = SA_NODEFER;
+	s->sa.sa_flags = 0;
 	if (sigaction(SIGINT, &(s->sa), NULL) == -1) {
         perror("Failed to set up SIGINT handler");
     }

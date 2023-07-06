@@ -42,10 +42,10 @@ void	ft_execution(t_struct *s, t_parsed *parsed)
 	{
 		if (built_in_child == 2)
 		{
-			execve(parsed->command[1], &(parsed->command[1]), s->envp_char);
-			parsed->path = ft_check_access(s->path_tab, parsed->command[1]);
-			if (execve(parsed->path, &(parsed->command[1]), s->envp_char))
-				ft_error(s, EXECVE, parsed->command[1]);
+			execve(parsed->command[s->i], &(parsed->command[s->i]), s->envp_char);
+			parsed->path = ft_check_access(s->path_tab, parsed->command[s->i]);
+			if (execve(parsed->path, &(parsed->command[s->i]), s->envp_char))
+				ft_error_env(s, parsed->command[s->i]);
 		}
 		else
 		{

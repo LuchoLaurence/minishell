@@ -91,8 +91,8 @@ static void ft_pipe_and_fork(t_struct *s, t_parsed *parsed)
 	}
 	if (parsed->pid == 0)
 		ft_child_process(s, parsed);
-	if (!(parsed->next) && !(parsed->prev))
-		ft_env_changing_builtin(s, parsed);
+	//if (!(parsed->next) && !(parsed->prev))
+	ft_env_changing_builtin(s, parsed);
 	ft_parent_process(s, parsed);
 }
 
@@ -102,11 +102,10 @@ void ft_exec(t_struct *s)
 
 	if (!s)
 		return ;
+	s->error = 0;
 	parsed = s->parsed;
 	if (parsed->redirection)
 		ft_open_double_redirect_in(s, parsed);
-//	s->previous_fd = open("jalsjrqwbzvljafsd", O_RDONLY | O_CREAT, 0644);
-//	unlink("jalsjrqwbzvljafsd");
 	s->previous_fd = dup(STDIN_FILENO);
 	ft_change_underscore(s, parsed);
 	while (parsed)

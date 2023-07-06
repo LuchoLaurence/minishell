@@ -65,6 +65,7 @@ static void	ft_change_envp_node(t_struct *s, char *last_argument)
 		{
 			free(temp->value[1]);
 			temp->value[1] = ft_get_path_bin_or_last_argument(s, last_argument);
+			temp->nb_words = 2;
 			break ;
 		}
 		temp = temp->next;

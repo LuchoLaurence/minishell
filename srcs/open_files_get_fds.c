@@ -20,7 +20,6 @@ int	ft_open_file_in(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 		close(parsed->fd_in);
 	parsed->fd_in = dup(redirection->fd);
 	close(redirection->fd);
-//	parsed->fd_in = redirection->fd;
 	return (0);
 }
 
@@ -32,8 +31,6 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 		return (1);
 	if (parsed->fd_out)
 		close(parsed->fd_out);
-//	parsed->fd_out = open("temp2", O_WRONLY | O_CREAT, 0644);
-//	unlink("temp2");
 	if (redirection->filename)
 	{
 		if (redirection->type == redirect_out)
@@ -51,7 +48,6 @@ int	ft_open_file_out(t_struct *s, t_parsed *parsed, t_redirec *redirection)
 	}
 	if (parsed->fd_out)
 		close(parsed->fd_out);
-	//parsed->fd_out = redirection->fd;
 	parsed->fd_out = dup(redirection->fd);
 	close (redirection->fd);
 	return (0);

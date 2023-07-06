@@ -20,6 +20,8 @@
 # define INVALID_OPTION 2
 # define INVALID_IDENTIFIER 3
 # define HOME_NOT_SET 4
+# define NUMERIC 5
+# define ARGUMENTS 6
 # define SEGFAULT 11
 
 # include <errno.h>
@@ -116,8 +118,7 @@ typedef struct s_struct
 	char				*old_pwd_memory;
 	char				*pwd_memory;
 	struct sigaction	sa;
-//	struct termios		termios;
-//	struct termios		term_origin;
+	struct termios		termios;
 	int					unset_oldpwd;
 	int					unset_pwd;
 	int					previous_fd;
@@ -132,14 +133,17 @@ typedef struct s_struct
 /*	Built_ins */
 
 int		ft_cd(t_struct *s, t_parsed *p);
-void	ft_check_args(t_struct *s, char *str);
+void	ft_change_pwd(t_struct *s, char *new_pwd);
+void	ft_check_args(t_struct *s, t_parsed *parsed, char *str);
 int		ft_check_first_arg(t_struct *s, t_parsed *parsed);
+void	ft_check_old_pwd(t_struct *s, char *old_pwd);
 int		ft_echo(t_struct *s, t_parsed *parsed);
 int		ft_env(t_struct *s);
-int		ft_exit(t_struct *s, t_parsed * parsed);
+int		ft_exit(t_struct *s, t_parsed *parsed);
 int		ft_export(t_struct *s, t_parsed *parsed);
 void	ft_print_envp_ascii_order(t_struct *s);
 int		ft_pwd(t_parsed *parsed);
+int		ft_pwd_write(void);
 int		ft_unset(t_struct *s, t_parsed *parsed);
 
 /*  Errors */
@@ -147,8 +151,11 @@ int		ft_unset(t_struct *s, t_parsed *parsed);
 void	ft_change_return_code(t_struct *s);
 void	ft_close_all_previous_files_error(t_parsed *parsed);
 void	ft_error(t_struct *s, int error, char *name);
-void	ft_error_export(char *arg, int error);
+void	ft_error_export(t_struct *s, char *arg, int error);
+void	ft_error_env(t_struct *s, char *name);
+void	ft_error_unset(t_struct *s, char *arg, int error);
 void	ft_get_last_cmd_code(t_struct *s, t_parsed *parsed);
+int		ft_last_is_builtin(t_parsed *parsed);
 
 /*	Environment */
 

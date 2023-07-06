@@ -163,20 +163,15 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_signal_detected = 0;
 		line = readline("minishell$ ");
-		printf("(1)line = %s ==== %d\n", line, g_signal_detected);
-		if (line == NULL || !ft_strncmp("exit\n", line))
-		{
-			write(1, "exit\n", 5);
-			exit(0);
-		}
-		if (g_signal_detected)
-		{
-			write(STDIN_FILENO, ft_itoa(g_signal_detected), 1);
-			continue ;
-		}
 		add_history(line);
 		ft_read_line(s, line);
-		ft_exec(s);
+		if (line != NULL)
+			ft_exec(s);
+		else
+		{
+			write(STDOUT_FILENO, "exit\n", 5);
+			exit(0);
+		}
 		printf("node [?] = %s\n", ft_get_env_value(s, "?"));
 		ft_free_structs(s);
 		free(line);
