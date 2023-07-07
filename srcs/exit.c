@@ -1,33 +1,38 @@
 #include "minishell.h"
 
-static int	ft_atoi_exit(const char *str)
+/*	static int ft_atoi_exit gets the verification of each char inside str
+	and returns nb * sign if it is a correct number */
+static int	ft_atoi_exit(const char *str, int nb)
 {
 	char	*s;
-	int		nb;
-	int		signe;
+	int		sign;
 
 	if (!str || (str && ft_isalpha(*str)))
 		return (-2147483648);
-	nb = 0;
-	signe = 1;
+	sign = 1;
 	s = (char *) str;
 	while (*s == ' ' || (*s >= 9 && *s <= 13))
 		s++;
 	if (*s == '+' || *s == '-')
 	{
 		if (*s == '-')
-			signe = -signe;
+			sign = -sign;
 		s++;
 	}
+	if (*s && !ft_isdigit(*s))
+		return (-2147483648);
 	while (*s >= '0' && *s <= '9')
 	{
 		nb = nb * 10 + (*s - 48);
 		s++;
 	}
-	return (nb * signe);
+	if (*s && !ft_isdigit(*s))
+		return (-2147483648);
+	return (nb * sign);
 }
 
-
+/*	static void ft_error_exit calls the correct error message and sends it
+	to the STDERR_FILENO */
 static void	ft_error_exit(char *arg, int error)
 {
 	char	*str;
@@ -48,6 +53,8 @@ static void	ft_error_exit(char *arg, int error)
 	ft_free_ptr((void *) str);
 }
 
+/*	int ft_exit is called when ctrl+d is pressed or when exit is written in
+	non-interactive mode */
 int	ft_exit(t_struct *s, t_parsed *parsed)
 {
 	if (!s || !parsed)
@@ -61,7 +68,7 @@ int	ft_exit(t_struct *s, t_parsed *parsed)
 	{
 		if (parsed->command[1])
 		{
-			s->error = ft_atoi_exit(parsed->command[1]);
+			s->error = ft_atoi_exit(parsed->command[1], 0);
 			if (s->error == -2147483648)
 			{
 				ft_error_exit(parsed->command[1], NUMERIC);
